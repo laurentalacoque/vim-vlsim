@@ -22,16 +22,16 @@ function! s:assert_module_equals(wanted,actual) dict
 
     " should have basic keys
     for key in ["lang", "generics", "ports"]
-        call self.assert(has_key(a:actual,key), "missing basic key " .. key)
+        call self.assert(has_key(a:actual,key), "missing basic key " . key)
     endfor
 
     "should have the same keys
     for key in keys(a:wanted)
-        call self.assert(has_key(a:actual,key), "missing key " .. key)
+        call self.assert(has_key(a:actual,key), "missing key " . key)
     endfor
     for key in keys(a:actual)
         if key !=# 'file'
-            call self.assert(has_key(a:wanted,key), "extraneous key " .. key)
+            call self.assert(has_key(a:wanted,key), "extraneous key " . key)
         endif
     endfor
 
@@ -43,7 +43,7 @@ function! s:assert_module_equals(wanted,actual) dict
     if len(a:wanted.generics) == len(a:actual.generics)
         " size matches
         for i in range(len(a:actual.generics))
-            call self.assert_equal(a:wanted.generics[i], a:actual.generics[i],"mismatch for generics[" .. i.."]")
+            call self.assert_equal(a:wanted.generics[i], a:actual.generics[i],"mismatch for generics[" . i."]")
         endfor
     endif
 
@@ -52,7 +52,7 @@ function! s:assert_module_equals(wanted,actual) dict
     if len(a:wanted.ports) == len(a:actual.ports)
         " size matches
         for i in range(len(a:actual.ports))
-            call self.assert_equal(a:wanted.ports[i], a:actual.ports[i],"mismatch for ports[" .. i .."]")
+            call self.assert_equal(a:wanted.ports[i], a:actual.ports[i],"mismatch for ports[" . i ."]")
         endfor
     endif
 
@@ -66,7 +66,7 @@ endfunction
 function! s:goto_yank_compare_module(label, module_data) dict
     call self.data.goto(a:label)
     VlsiYank
-    call self.assert(has_key(g:modules,a:label), "capture failed for "..a:label)
+    call self.assert(has_key(g:modules,a:label), "capture failed for ".a:label)
     call self.assert_module_equals(a:module_data, g:modules[a:label])
 endfunction
 
@@ -75,7 +75,7 @@ endfunction
 "--------------------------------------------------------------------------------
 " Testcase
 "--------------------------------------------------------------------------------
-let s:tc = unittest#testcase#new("Test VlsiYank functions for VHDL", {'data' : s:here .. '/ressources/test_file.vhd'})
+let s:tc = unittest#testcase#new("Test VlsiYank functions for VHDL", {'data' : s:here . '/ressources/test_file.vhd'})
 
 "--------------------------------------------------------------------------------
 " Setup and Teardown
@@ -295,7 +295,7 @@ endfunction
 " {{{ 
 "
 function! s:tc.test_v_yankall()
-    let  l:command = "VlsiYankAll "..s:here.."/ressources/test_file.vhd"
+    let  l:command = "VlsiYankAll ".s:here."/ressources/test_file.vhd"
     execute l:command
     
     if self.assert_exists('g:modules', "VlsiYankAll: no module captured")
@@ -317,7 +317,7 @@ function! s:tc.test_v_yankall()
                     \'pdt1',
                     \'pdt2',
                     \]
-            call self.assert_has_key(modname, g:modules, "VlsiYankAll : missing module ".. modname)
+            call self.assert_has_key(modname, g:modules, "VlsiYankAll : missing module ". modname)
         endfor
     endif
 

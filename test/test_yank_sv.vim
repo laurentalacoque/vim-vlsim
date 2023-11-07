@@ -20,16 +20,16 @@ function! s:assert_module_equals(wanted,actual) dict
 
     " should have basic keys
     for key in ["lang", "generics", "ports"]
-        call self.assert(has_key(a:actual,key), "missing basic key " .. key)
+        call self.assert(has_key(a:actual,key), "missing basic key " . key)
     endfor
 
     "should have the same keys
     for key in keys(a:wanted)
-        call self.assert(has_key(a:actual,key), "missing key " .. key)
+        call self.assert(has_key(a:actual,key), "missing key " . key)
     endfor
     for key in keys(a:actual)
         if key !=# 'file'
-            call self.assert(has_key(a:wanted,key), "extraneous key " .. key)
+            call self.assert(has_key(a:wanted,key), "extraneous key " . key)
         endif
     endfor
 
@@ -41,7 +41,7 @@ function! s:assert_module_equals(wanted,actual) dict
     if len(a:wanted.generics) == len(a:actual.generics)
         " size matches
         for i in range(len(a:actual.generics))
-            call self.assert_equal(a:wanted.generics[i], a:actual.generics[i],"mismatch for generics[" .. i.."]")
+            call self.assert_equal(a:wanted.generics[i], a:actual.generics[i],"mismatch for generics[" . i."]")
         endfor
     endif
 
@@ -50,7 +50,7 @@ function! s:assert_module_equals(wanted,actual) dict
     if len(a:wanted.ports) == len(a:actual.ports)
         " size matches
         for i in range(len(a:actual.ports))
-            call self.assert_equal(a:wanted.ports[i], a:actual.ports[i],"mismatch for ports[" .. i .."]")
+            call self.assert_equal(a:wanted.ports[i], a:actual.ports[i],"mismatch for ports[" . i ."]")
         endfor
     endif
 
@@ -64,7 +64,7 @@ endfunction
 function! s:goto_yank_compare_module(label, module_data) dict
     call self.data.goto(a:label)
     VlsiYank
-    call self.assert(has_key(g:modules,a:label), "capture failed for "..a:label)
+    call self.assert(has_key(g:modules,a:label), "capture failed for ".a:label)
     call self.assert_module_equals(a:module_data, g:modules[a:label])
 endfunction
 
@@ -73,7 +73,7 @@ function! s:assert_interface_equals(wanted,actual) dict
 
     call self.assert(type(a:actual) ==type({}), "interface should be a dictionnary")
     for key in ['lang','generics','ports']
-        call self.assert(has_key(a:actual,key), "interface missing key: "..key)
+        call self.assert(has_key(a:actual,key), "interface missing key: ".key)
     endfor
 
     " strip down actual and wanted to modules and compare them
@@ -101,10 +101,10 @@ function! s:assert_interface_equals(wanted,actual) dict
 
     "should have the same keys
     for key in keys(a:wanted.modports)
-        call self.assert(has_key(a:actual.modports,key), "missing key " .. key)
+        call self.assert(has_key(a:actual.modports,key), "missing key " . key)
     endfor
     for key in keys(a:actual.modports)
-        call self.assert(has_key(a:wanted.modports,key), "extraneous key " .. key)
+        call self.assert(has_key(a:wanted.modports,key), "extraneous key " . key)
     endfor
 
     " iterate through modports
@@ -112,12 +112,12 @@ function! s:assert_interface_equals(wanted,actual) dict
         for key in keys(a:wanted.modports)
             let wanted_sigs = a:wanted.modports[key]
             let actual_sigs = a:actual.modports[key]
-            call self.assert_equal(len(wanted_sigs), len(actual_sigs), "modport '"..key.."' size differ")
+            call self.assert_equal(len(wanted_sigs), len(actual_sigs), "modport '".key."' size differ")
             if len(wanted_sigs) == len(actual_sigs)
                 for i in range(len(wanted_sigs))
                     call self.assert_equal(
                                 \ wanted_sigs[i], actual_sigs[i], 
-                                \ "modport '"..key.."' signal [" ..i.. "] differ")
+                                \ "modport '".key."' signal [" .i. "] differ")
                 endfor
             endif
         endfor
@@ -130,7 +130,7 @@ endfunction
 function! s:goto_yank_compare_interface(label, interface_data) dict
     call self.data.goto(a:label)
     VlsiYank
-    call self.assert(has_key(g:interfaces,a:label), "capture failed for "..a:label)
+    call self.assert(has_key(g:interfaces,a:label), "capture failed for ".a:label)
     call self.assert_interface_equals(a:interface_data, g:interfaces[a:label])
 endfunction
 
@@ -139,7 +139,7 @@ endfunction
 "--------------------------------------------------------------------------------
 " Testcase
 "--------------------------------------------------------------------------------
-let s:tc = unittest#testcase#new("Test VlsiYank functions for SystemVerilog", {'data' : s:here .. '/ressources/test_file.sv'})
+let s:tc = unittest#testcase#new("Test VlsiYank functions for SystemVerilog", {'data' : s:here . '/ressources/test_file.sv'})
 
 "--------------------------------------------------------------------------------
 " Setup and Teardown
@@ -500,7 +500,7 @@ endfunction
 " {{{ 
 "
 function! s:tc.test_sv_yankall()
-    let  l:command = "VlsiYankAll "..s:here.."/ressources/test_file.sv"
+    let  l:command = "VlsiYankAll ".s:here."/ressources/test_file.sv"
     execute l:command
     
     if self.assert_exists('g:modules', "VlsiYankAll: no module captured")
@@ -531,13 +531,13 @@ function! s:tc.test_sv_yankall()
                     \'pdt1',
                     \'pdt2',
                     \]
-            call self.assert_has_key(modname, g:modules, "VlsiYankAll : missing module ".. modname)
+            call self.assert_has_key(modname, g:modules, "VlsiYankAll : missing module ". modname)
         endfor
     endif
 
     if self.assert_exists('g:interfaces', "VlsiYankAll: no interface captured")
         for ifname in ['if1', 'if1g', 'ifmp1']
-            call self.assert_has_key(ifname, g:interfaces, "VlsiYankAll : missing interface ".. ifname)
+            call self.assert_has_key(ifname, g:interfaces, "VlsiYankAll : missing interface ". ifname)
         endfor
     endif
 

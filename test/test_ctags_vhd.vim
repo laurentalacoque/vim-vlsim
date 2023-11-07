@@ -6,7 +6,7 @@
 " where are we?
 let s:here= expand('<sfile>:p:h')
 
-let s:tc = unittest#testcase#new("Test ctags generation for VHDL", {'data' : s:here .. '/ressources/test_ctags.vhd'})
+let s:tc = unittest#testcase#new("Test ctags generation for VHDL", {'data' : s:here . '/ressources/test_ctags.vhd'})
 
 "--------------------------------------------------------------------------------
 " Setup and Teardown
@@ -15,9 +15,9 @@ let s:tc = unittest#testcase#new("Test ctags generation for VHDL", {'data' : s:h
 
 function! s:tc.SETUP()
     let datafile = s:tc.data.file
-    let ctags_exec = s:here .. "/../bin/ctags/vhdl.pl"
+    let ctags_exec = s:here . "/../bin/ctags/vhdl.pl"
     call self.puts(ctags_exec)
-    let self.ctags_out = systemlist(ctags_exec .. " " .. datafile)
+    let self.ctags_out = systemlist(ctags_exec . " " . datafile)
     "let self.ctags_out = systemlist("cat ~/temp/ctags")
 endfunction
 
@@ -106,7 +106,7 @@ function s:tc.test_vhd_ctags_structure_valid()
         if !len(ml)
             "invalid line
             let invalid_line_count +=1
-            call self.puts("Invalid format for line["..line_num.."]: "..line)
+            call self.puts("Invalid format for line[".line_num."]: ".line)
         else
             " valid line
             let tag    = ml[1]
@@ -118,7 +118,7 @@ function s:tc.test_vhd_ctags_structure_valid()
             let kind   = matchstr(trim(fields[0]),'^\(kind:\)\?\zs\w$')
             if  kind ==# '' || kind !~# valid_kinds
                 let invalid_kind_count +=1
-                call self.puts("Invalid kind for tag '"..tag.."' : '"..kind.."'")
+                call self.puts("Invalid kind for tag '".tag."' : '".kind."'")
                 let parsed_fields.kind = ''
             else
                 "Valid kind
@@ -128,7 +128,7 @@ function s:tc.test_vhd_ctags_structure_valid()
                 if kind =~# '[ea]'
                     if has_key(modules,tag)
                         let duplicate_entities_count +=1
-                        call self.puts("Duplicate entity/architecture '"..tag.."'")
+                        call self.puts("Duplicate entity/architecture '".tag."'")
                     endif
                     let modules[tag] = 1
                 endif
@@ -139,7 +139,7 @@ function s:tc.test_vhd_ctags_structure_valid()
                 let fl = matchlist(curfield,'^\(\w\+\):\(.*\)$')
                 if len(fl) == 0
                     let invalid_field_count +=1
-                    call self.puts("Invalid field for tag '".. tag .."' : '".. curfield .."'")
+                    call self.puts("Invalid field for tag '". tag ."' : '". curfield ."'")
                 else
                     let fieldname = fl[1]
                     let fieldvalue= fl[2]
@@ -149,19 +149,19 @@ function s:tc.test_vhd_ctags_structure_valid()
             " check for file field
             if !has_key(parsed_fields, 'file')
                 let invalid_field_file_count +=1
-                call self.puts("missing 'file:' field for tag '"..tag.."'")
+                call self.puts("missing 'file:' field for tag '".tag."'")
             endif
             " check for line field
             if !has_key(parsed_fields, 'line')
                 let invalid_field_line_count +=1
-                call self.puts("missing 'line:' field for tag '"..tag.."'")
+                call self.puts("missing 'line:' field for tag '".tag."'")
             endif
 
             " check for unknown field
             for fname in keys(parsed_fields)
                 if !has_key(all_valid_field_names, fname)
                     let extraneous_fields_count +=1
-                    call self.puts("Unknown field '"..fname.."' for tag '"..tag.."'")
+                    call self.puts("Unknown field '".fname."' for tag '".tag."'")
                 endif
             endfor
 
@@ -170,13 +170,13 @@ function s:tc.test_vhd_ctags_structure_valid()
         endif " is valid line
     endfor " foreach line in file
 
-    call self.assert_equal(0,invalid_line_count,"ctags contains "..invalid_line_count.." invalid lines")
-    call self.assert_equal(0,invalid_kind_count,"ctags contains "..invalid_kind_count.." invalid kinds")
-    call self.assert_equal(0,invalid_field_count,"ctags contains "..invalid_field_count.." invalid fields")
-    call self.assert_equal(0,invalid_field_file_count,"ctags contains "..invalid_field_file_count.. " missing 'file:' fields")
-    call self.assert_equal(0,invalid_field_line_count,"ctags contains "..invalid_field_line_count.. " missing 'line:' fields")
-    call self.assert_equal(0,extraneous_fields_count,"ctags contains "..extraneous_fields_count .. " unknown fields")
-    call self.assert_equal(0,duplicate_entities_count,"ctags contains "..duplicate_entities_count .. " duplicate entities")
+    call self.assert_equal(0,invalid_line_count,"ctags contains ".invalid_line_count." invalid lines")
+    call self.assert_equal(0,invalid_kind_count,"ctags contains ".invalid_kind_count." invalid kinds")
+    call self.assert_equal(0,invalid_field_count,"ctags contains ".invalid_field_count." invalid fields")
+    call self.assert_equal(0,invalid_field_file_count,"ctags contains ".invalid_field_file_count. " missing 'file:' fields")
+    call self.assert_equal(0,invalid_field_line_count,"ctags contains ".invalid_field_line_count. " missing 'line:' fields")
+    call self.assert_equal(0,extraneous_fields_count,"ctags contains ".extraneous_fields_count . " unknown fields")
+    call self.assert_equal(0,duplicate_entities_count,"ctags contains ".duplicate_entities_count . " duplicate entities")
 
     let element_in_element_count = 0
     let invalid_scope_count = 0
@@ -188,7 +188,7 @@ function s:tc.test_vhd_ctags_structure_valid()
         if pl.kind =~# '[e]'
             "element, shouldn't have a scope
             if has_key(pl.fields,'entity')
-                call self.puts("Element '"..pl.tag.."' shouldn't have a scope")
+                call self.puts("Element '".pl.tag."' shouldn't have a scope")
                 let element_in_element_count +=1
             endif
         endif "module or interface
@@ -221,13 +221,13 @@ function s:tc.test_vhd_ctags_structure_valid()
                 " check that this references a valid element
                 if !has_key(elements, unit_scope)
                     let invalid_scope_reference_count +=1
-                    call self.puts("Element '"..pl.tag.."' has unexisting reference scope '"..unit_scope.."' ("..scope..")")
+                    call self.puts("Element '".pl.tag."' has unexisting reference scope '".unit_scope."' (".scope.")")
                 endif
             endfor
 
             if !has_key(elements,scope_last) && !has_key(all_valid_scope_targets,scope_last)
                     let invalid_scope_reference_count +=1
-                    call self.puts("Element '"..pl.tag.."' has unexisting reference scope '"..unit_scope.."' or target ("..scope..")")
+                    call self.puts("Element '".pl.tag."' has unexisting reference scope '".unit_scope."' or target (".scope.")")
             endif
 
         endif
@@ -243,7 +243,7 @@ function s:tc.test_vhd_ctags_structure_valid()
         let obj = s:lookfor(parsed_lines,tag)
         if type(obj) == type(0) && obj == 0
             " failed to find it
-            call self.assert(0,"Missing expected tag "..tag)
+            call self.assert(0,"Missing expected tag ".tag)
         else
             "found it
             "compare wanted fields
@@ -251,10 +251,10 @@ function s:tc.test_vhd_ctags_structure_valid()
             for key in keys(expected_fields)
                 if !has_key(obj.fields,key)
                     " object doesn't have the mandatory field
-                    call self.assert(0,"missing field "..key.." in object '".tag."'")
+                    call self.assert(0,"missing field ".key." in object '".tag."'")
                 else
                     " object has key, compare values
-                    call self.assert_equal(expected_fields[key], obj.fields[key], "value mismatch for field '"..key.."' of object '"..tag.."'")
+                    call self.assert_equal(expected_fields[key], obj.fields[key], "value mismatch for field '".key."' of object '".tag."'")
                 endif
             endfor "foreach compared fields
         endif " object 'tag' found

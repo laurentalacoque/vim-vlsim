@@ -15,7 +15,7 @@ function! s:get_canonical(comment_start, tag) dict
  let line_array = self.data.get(a:tag)
  " remove comments
  for i in range( len(line_array) )
-     let line_array[i] = substitute(line_array[i],a:comment_start ..'.*$','','g')
+     let line_array[i] = substitute(line_array[i],a:comment_start .'.*$','','g')
  endfor
  " join with spaces
  let line = join(line_array, ' ')
@@ -30,10 +30,10 @@ endfunction
 function! s:test_paste_equals(wanted, entity_name, paste_command) dict
     " go to scratchpad
     call self.data.goto('scratchpad')
-    exec a:paste_command .. " " .. a:entity_name
+    exec a:paste_command . " " . a:entity_name
     " retrieve pasted text
     let pasted = self.get_canonical('scratchpad')
-    call self.assert_equal(a:wanted, pasted, '['.. a:entity_name ..'] Paste failed for command ' .. a:paste_command)
+    call self.assert_equal(a:wanted, pasted, '['. a:entity_name .'] Paste failed for command ' . a:paste_command)
 endfunction
 
 
@@ -42,13 +42,13 @@ function! s:install_test_functions()
     for module_name in keys(s:default_modules)
         "systemverilog
         for command_name in keys(s:reference[module_name])
-            let test_fn_name = "test_systemverilog_" .. command_name .. "_" .. module_name
+            let test_fn_name = "test_systemverilog_" . command_name . "_" . module_name
             let s:tc[test_fn_name] = function('s:test_paste_equals',
                  \ [s:reference[module_name][command_name],module_name, command_name])
         endfor
         " verilog
         for command_name in keys(s:reference_verilog[module_name])
-            let test_fn_name = "test_verilog_" .. command_name .. "_" .. module_name
+            let test_fn_name = "test_verilog_" . command_name . "_" . module_name
             let s:tc_v[test_fn_name] = function('s:test_paste_equals',
                  \ [s:reference_verilog[module_name][command_name],module_name, command_name])
         endfor
@@ -57,13 +57,13 @@ function! s:install_test_functions()
             let elements = split(command_name)
             let cmd = elements[0]
             let exec_command = join([cmd, module_name, elements[1], elements[2]])
-            let test_fn_name = "test_verilog_prefix_suffix_" .. cmd .. "_" .. module_name
+            let test_fn_name = "test_verilog_prefix_suffix_" . cmd . "_" . module_name
             let s:tc_v[test_fn_name] = function('s:test_paste_equals',
                  \ [s:reference_verilog_prefix_suffix[module_name][command_name],module_name, exec_command])
         endfor
         " vhdl
         for command_name in keys(s:reference_vhdl[module_name])
-            let test_fn_name = "test_vhdl_" .. command_name .. "_" .. module_name
+            let test_fn_name = "test_vhdl_" . command_name . "_" . module_name
             let s:tc_vhdl[test_fn_name] = function('s:test_paste_equals',
                  \ [s:reference_vhdl[module_name][command_name],module_name, command_name])
         endfor
@@ -71,8 +71,8 @@ function! s:install_test_functions()
     " vhdl with prefix and suffix
     for module_name in keys(s:reference_vhdl_prefix_suffix)
         for command_name in keys(s:reference_vhdl_prefix_suffix[module_name])
-            let test_fn_name = "test_vhdl_prefix_suffix_" .. command_name .. "_" .. module_name
-            let command = command_name .. " " .. module_name .." _s p_"
+            let test_fn_name = "test_vhdl_prefix_suffix_" . command_name . "_" . module_name
+            let command = command_name . " " . module_name ." _s p_"
             let s:tc_vhdl[test_fn_name] = function('s:test_paste_equals',
                  \ [s:reference_vhdl_prefix_suffix[module_name][command_name],module_name, command])
         endfor
@@ -84,15 +84,15 @@ endfunction
 " Testcases
 "--------------------------------------------------------------------------------
 "systemverilog
-let s:tc      = unittest#testcase#new("Test VlsiPaste functions for SystemVerilog", {'data' : s:here .. '/ressources/test_file.sv'})
+let s:tc      = unittest#testcase#new("Test VlsiPaste functions for SystemVerilog", {'data' : s:here . '/ressources/test_file.sv'})
 "systemverilog-compile
 let s:co_sverilog = unittest#testcase#new("SystemVerilog compilation for VlsiPaste functions")
 "verilog
-let s:tc_v    = unittest#testcase#new("Test VlsiPaste functions for Verilog",       {'data' : s:here .. '/ressources/test_file.v'})
+let s:tc_v    = unittest#testcase#new("Test VlsiPaste functions for Verilog",       {'data' : s:here . '/ressources/test_file.v'})
 "verilog-compile
 let s:co_verilog = unittest#testcase#new("Verilog compilation for VlsiPaste functions")
 "vhdl
-let s:tc_vhdl = unittest#testcase#new("Test VlsiPaste functions for Vhdl",          {'data' : s:here .. '/ressources/test_file.vhd'})
+let s:tc_vhdl = unittest#testcase#new("Test VlsiPaste functions for Vhdl",          {'data' : s:here . '/ressources/test_file.vhd'})
 "vhdl-compile
 let s:co_vhdl = unittest#testcase#new("VHDL compilation for VlsiPaste functions")
 
@@ -484,13 +484,13 @@ function! s:co_vhdl.setup()
     let g:modules    = s:default_modules
     let g:interfaces = s:default_interface
     if s:vcom_ok
-        let self.tempfilename = tempname() .. ".vhd"
+        let self.tempfilename = tempname() . ".vhd"
         echomsg "__open_data_window__"
         if !bufexists(self.tempfilename)
           " The buffer doesn't exist.
           split
           hide edit `=self.tempfilename`
-          exec "hide read ".. s:here .. "/ressources/test_comp.vhd"
+          exec "hide read ". s:here . "/ressources/test_comp.vhd"
         elseif bufwinnr(self.tempfilename) != -1
           " The buffer exists, and it has a window.
           execute bufwinnr(self.tempfilename) 'wincmd w'
@@ -507,9 +507,9 @@ endfunction
 
 function! s:co_vhdl.teardown()
     if has_key(self,'tempfilename')
-        call self.puts("- generating file for compilation: " .. self.tempfilename)
-        exec "bdelete " .. self.tempfilename
-        "exec "!rm " .. self.tempfilename
+        call self.puts("- generating file for compilation: " . self.tempfilename)
+        exec "bdelete " . self.tempfilename
+        "exec "!rm " . self.tempfilename
         unlet self.tempfilename
     endif
 endfunction
@@ -520,13 +520,13 @@ function! s:co_verilog.setup()
     let g:modules    = s:default_modules
     let g:interfaces = s:default_interface
     if s:vlog_ok
-        let self.tempfilename = tempname() .. ".v"
+        let self.tempfilename = tempname() . ".v"
         echomsg "__open_data_window__"
         if !bufexists(self.tempfilename)
           " The buffer doesn't exist.
           split
           hide edit `=self.tempfilename`
-          exec "hide read ".. s:here .. "/ressources/test_comp.v"
+          exec "hide read ". s:here . "/ressources/test_comp.v"
         elseif bufwinnr(self.tempfilename) != -1
           " The buffer exists, and it has a window.
           execute bufwinnr(self.tempfilename) 'wincmd w'
@@ -543,9 +543,9 @@ endfunction
 
 function! s:co_verilog.teardown()
     if has_key(self,'tempfilename')
-        call self.puts("- generating file for compilation: " .. self.tempfilename)
-        exec "bdelete " .. self.tempfilename
-        "exec "!rm " .. self.tempfilename
+        call self.puts("- generating file for compilation: " . self.tempfilename)
+        exec "bdelete " . self.tempfilename
+        "exec "!rm " . self.tempfilename
         unlet self.tempfilename
     endif
 endfunction
@@ -556,13 +556,13 @@ function! s:co_sverilog.setup()
     let g:modules    = s:default_modules
     let g:interfaces = s:default_interface
     if s:vlog_ok
-        let self.tempfilename = tempname() .. ".sv"
+        let self.tempfilename = tempname() . ".sv"
         echomsg "__open_data_window__"
         if !bufexists(self.tempfilename)
           " The buffer doesn't exist.
           split
           hide edit `=self.tempfilename`
-          exec "hide read ".. s:here .. "/ressources/test_comp.sv"
+          exec "hide read ". s:here . "/ressources/test_comp.sv"
         elseif bufwinnr(self.tempfilename) != -1
           " The buffer exists, and it has a window.
           execute bufwinnr(self.tempfilename) 'wincmd w'
@@ -579,9 +579,9 @@ endfunction
 
 function! s:co_sverilog.teardown()
     if has_key(self,'tempfilename')
-        call self.puts("- generating file for compilation: " .. self.tempfilename)
-        exec "bdelete " .. self.tempfilename
-        "exec "!rm " .. self.tempfilename
+        call self.puts("- generating file for compilation: " . self.tempfilename)
+        exec "bdelete " . self.tempfilename
+        "exec "!rm " . self.tempfilename
         unlet self.tempfilename
     endif
 endfunction
@@ -607,7 +607,7 @@ function s:co_vhdl.test_vhdl_compilation_metatest_comp_can_fail()
     VlsiPasteAsInstance modg2p3
     wq
 
-    let vcom_output = system('vcom ' .. self.tempfilename)
+    let vcom_output = system('vcom ' . self.tempfilename)
 
     call self.assert_not_equal(0,v:shell_error, "Compilation successful despite invalid code")
 
@@ -628,7 +628,7 @@ function s:co_vhdl.test_vhdl_compilation_entity()
     VlsiPasteAsDefinition modg2p3
     wq
 
-    let vcom_output = system('vcom ' .. self.tempfilename)
+    let vcom_output = system('vcom ' . self.tempfilename)
 
     call self.assert_equal(0,v:shell_error, "Compilation error")
 
@@ -664,7 +664,7 @@ function s:co_vhdl.test_vhdl_compilation_entity_architecture()
     norm 1j
 
     w
-    let vcom_output = system('vcom ' .. self.tempfilename)
+    let vcom_output = system('vcom ' . self.tempfilename)
     call self.assert_equal(0,v:shell_error, "Compilation error")
     if v:shell_error != 0
         call self.puts(vcom_output)
@@ -695,7 +695,7 @@ function s:co_verilog.test_verilog_compilation_complex()
     VlsiPasteAsInstance modg0p3 _south
 
     w
-    let vcom_output = system('vlog ' .. self.tempfilename)
+    let vcom_output = system('vlog ' . self.tempfilename)
     call self.assert_equal(0,v:shell_error, "Compilation error")
     if v:shell_error != 0
         call self.puts(vcom_output)
@@ -717,7 +717,7 @@ function s:co_verilog.test_verilog_compilation_metatest_comp_can_fail()
     VlsiPasteAsInstance modg2p3
     wq
 
-    let vcom_output = system('vlog ' .. self.tempfilename)
+    let vcom_output = system('vlog ' . self.tempfilename)
 
     call self.assert_not_equal(0,v:shell_error, "Compilation successful despite invalid code")
 
@@ -746,7 +746,7 @@ function s:co_sverilog.test_systemverilog_compilation_complex()
     VlsiPasteAsInstance modg0p3 _south
 
     w
-    let vcom_output = system('vlog ' .. self.tempfilename)
+    let vcom_output = system('vlog ' . self.tempfilename)
     call self.assert_equal(0,v:shell_error, "Compilation error")
     if v:shell_error != 0
         call self.puts(vcom_output)
@@ -769,7 +769,7 @@ function s:co_sverilog.test_sverilog_compilation_metatest_comp_can_fail()
     VlsiPasteAsInstance modg2p3
     wq
 
-    let vcom_output = system('vlog ' .. self.tempfilename)
+    let vcom_output = system('vlog ' . self.tempfilename)
 
     call self.assert_not_equal(0,v:shell_error, "Compilation successful despite invalid code")
 

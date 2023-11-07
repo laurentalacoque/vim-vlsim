@@ -1,0 +1,6 @@
+Things to do for compatibility:
+
+- get rid of remaining #{ } dicts in test/
+- 7.x doesn't support default values for arguments
+
+- test with /bin/gvim (7.4)

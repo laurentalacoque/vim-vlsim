@@ -3,14 +3,14 @@ let b:VlsiYank              = function('vlsi#v_sv#Yank')
 let b:VlsiPasteAsDefinition = function('vlsi#GenericPaste',[vlsi#v_sv#formatPatterns.definition])
 let b:VlsiPasteAsInstance   = function('vlsi#GenericPaste',[vlsi#v_sv#formatPatterns.instance])
 let b:VlsiPasteSignals      = function('vlsi#GenericPaste',[vlsi#v_sv#formatPatterns.signals])
-let b:vlsi_config           = #{
-            \ language            : 'verilog',
-            \ comment             : "//",
-            \ default_scalar_type : 'wire',
-            \ default_vector_type : 'wire',
-            \ entity_regexp       : #{begin:'\c^\s*\(module\)', end:'\c^\s*endmodule'},
-            \ kind2dir            : #{i: 'input', o: 'output', io: 'inout'},
-            \ formatRange         : function("vlsi#v_sv#formatRange")}
+let b:vlsi_config           = {
+            \ 'language'            : 'verilog',
+            \ 'comment'             : "//",
+            \ 'default_scalar_type' : 'wire',
+            \ 'default_vector_type' : 'wire',
+            \ 'entity_regexp'       : { 'begin': '\c^\s*\(module\)', 'end': '\c^\s*endmodule'},
+            \ 'kind2dir'            : { 'i': 'input', 'o': 'output', 'io': 'inout'},
+            \ 'formatRange'         : function("vlsi#v_sv#formatRange")}
 
 " Create default bindings
 call vlsi#Bindings()

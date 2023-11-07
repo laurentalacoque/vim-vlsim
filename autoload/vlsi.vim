@@ -173,8 +173,6 @@ function! vlsi#YankAll(...)
     " remember g:Vlsi_last_yanked_entity to restore it at the end
     if exists('g:Vlsi_last_yanked_entity')
         let l:saved_last_yanked_entity = g:Vlsi_last_yanked_entity
-    else
-        let l:saved_last_yanked_entity = v:none
     endif
 
     "iterate over files
@@ -190,7 +188,7 @@ function! vlsi#YankAll(...)
             " The buffer doesn't exist. load it
             split
             let I_loaded = 1
-            echomsg "VlsiYankAll: loading " .. data_file
+            echomsg "VlsiYankAll: loading " . data_file
             hide edit `=data_file`
         elseif bufwinnr(data_file) != -1
             " The buffer exists, and it has a window.
@@ -206,7 +204,7 @@ function! vlsi#YankAll(...)
         " Check if the buffer has the yank function
         if !exists('b:VlsiYank')
             "Hu Ho, this buffer can't yank, skip it
-            echohl WarningMsg | echo "Invalid file for VlsiYankAll: " .. data_file | echohl None
+            echohl WarningMsg | echo "Invalid file for VlsiYankAll: " . data_file | echohl None
         else
             "Buffer loaded and ready to yank
             try
@@ -243,7 +241,7 @@ function! vlsi#YankAll(...)
         endif
 
         "restore Vlsi_last_yanked_entity (if needed)
-        if l:saved_last_yanked_entity == v:none
+        if !exists('l:saved_last_yanked_entity')
             "was not defined, unlet if it exits
             if exists('g:Vlsi_last_yanked_entity')
                 unlet g:Vlsi_last_yanked_entity
@@ -283,9 +281,9 @@ endfunction
 "          example function("myFunc")
 "          will call myFunc(item)
 function! vlsi#basicFormat(item, format)
-    if type(a:format) == v:t_func
+    if type(a:format) == type(function('tr'))
         return a:format(a:item)
-    elseif type(a:format) == v:t_string
+    elseif type(a:format) == type("")
         let item   = deepcopy(a:item) " we will change it
         let item.max_sizes = get(item,'max_sizes',{}) " add 'max_sizes' if needed
         let format = a:format
@@ -299,7 +297,7 @@ function! vlsi#basicFormat(item, format)
 
             if !has_key(item,key)
                 "doesn't have this key, we shouldn't change this
-                let item[ckey] = "{"..ckey.."}"
+                let item[ckey] = "{".ckey."}"
             else
                 if has_key(item.max_sizes,key)
                     "has a max_size => format with padding
@@ -318,10 +316,10 @@ function! vlsi#basicFormat(item, format)
 
         " substitute every occurence of {key} with the value item[key] into str "format"
         return substitute(format,'{\(\w\+\)}','\=item[submatch(1)]','g')
-        endif
-    else
-        echoerr "Invalid type (should be func or string)"
     endif
+else
+    echoerr "Invalid type (should be func or string)"
+endif
 endfunction
 
 " this function iterates over ports and format them using 'formatterFunctionName' function
@@ -332,23 +330,23 @@ endfunction
 " @arg prefix (str) an optionnal prefix for all signals (used in instance and signal pasting)
 " @arg suffix (str) an optionnal suffix for all signals (used in instance and signal pasting)
 " @return a list of ports definition as strings
-function! vlsi#portIterator(portList, formatter, suffix='', prefix='', expand=v:false, elem_max_size = {}, if_port_prefix ='')
+function! vlsi#PortIterator(portList, formatter, suffix='', prefix='', expand=0, elem_max_size = {}, if_port_prefix ='')
     if !empty(a:portList)
         let l:ports = []
         for l:state in ['align-pass', 'generate-pass']
             for l:item in a:portList
                 let l:portdef = {
-                        \ 'dir'         :  b:vlsi_config.kind2dir[l:item.dir],
-                        \ 'name'        :  a:if_port_prefix .. l:item.name,
-                        \ 'range_start' :  '',
-                        \ 'range_end'   :  '',
-                        \ 'range'       :  '',
-                        \ 'type'        :  b:vlsi_config.default_scalar_type,
-                        \ 'suffix'      :  a:suffix,
-                        \ 'prefix'      :  a:prefix,
-                        \ 'max_sizes'   :  a:elem_max_size,
-                        \ 'config'      :  b:vlsi_config
-                        \ }
+                            \ 'dir'         :  b:vlsi_config.kind2dir[l:item.dir],
+                            \ 'name'        :  a:if_port_prefix . l:item.name,
+                            \ 'range_start' :  '',
+                            \ 'range_end'   :  '',
+                            \ 'range'       :  '',
+                            \ 'type'        :  b:vlsi_config.default_scalar_type,
+                            \ 'suffix'      :  a:suffix,
+                            \ 'prefix'      :  a:prefix,
+                            \ 'max_sizes'   :  a:elem_max_size,
+                            \ 'config'      :  b:vlsi_config
+                            \ }
                 " check for complex type
                 let interface_elements = matchlist(item.type,'\c^\(\w\+\)\.\(\w\+\)')
                 if !empty(interface_elements)
@@ -362,15 +360,14 @@ function! vlsi#portIterator(portList, formatter, suffix='', prefix='', expand=v:
                     if a:expand || b:vlsi_config.language != 'systemverilog'
                         "We should expand the interface
                         if exists('g:interfaces') && has_key(g:interfaces,interface_name)
-                            if has_key(g:interfaces[interface_name].modports, interface_modport)
+                           if has_key(g:interfaces[interface_name].modports, interface_modport)
                                 "loop over interface.modports ports
                                 if l:state == 'generate-pass'
-                                    let l:if_ports = vlsi#portIterator(
+                                    let l:if_ports = vlsi#PortIterator(
                                                 \ g:interfaces[interface_name].modports[interface_modport],
                                                 \ a:formatter,
-                                                \ a:suffix, a:prefix , a:expand, a:elem_max_size, item.name .. '_')
-                                    let l:if_ports[0] =  "    ".. b:vlsi_config.comment .." Expansion of interface "..item.type .. " start\x01" .. l:if_ports[0]
-                                    "let l:if_ports = l:if_ports + ["    ".. b:vlsi_config.comment .." Expansion of interface "..item.type .. " end"]
+                                                \ a:suffix, a:prefix , a:expand, a:elem_max_size, item.name . '_')
+                                    let l:if_ports[0] =  "    " . b:vlsi_config.comment . " Expansion of interface " . item.type . " start\x01" . l:if_ports[0]
                                     let l:ports = extend(l:ports, l:if_ports)
                                     continue
                                 else
@@ -382,8 +379,8 @@ function! vlsi#portIterator(portList, formatter, suffix='', prefix='', expand=v:
                                 if l:state == 'generate-pass'
                                     "no modport of this name for this interface
                                     echohl WarningMsg
-                                    echo 'Interface expansion: Unknown modport ' .. interface_modport
-                                                \ .. ' for interface ' .. interface_name
+                                    echo 'Interface expansion: Unknown modport ' . interface_modport .
+                                                \ ' for interface ' . interface_name
                                     echohl None
                                 endif
                             endif "interface modport
@@ -391,7 +388,7 @@ function! vlsi#portIterator(portList, formatter, suffix='', prefix='', expand=v:
                             if l:state == 'generate-pass'
                                 " no interface of this name
                                 echohl WarningMsg
-                                echo 'Interface expansion: Unknown interface ' .. interface_name .. ' (did you VlsiYank it?)'
+                                echo 'Interface expansion: Unknown interface ' . interface_name . ' (did you VlsiYank it?)'
                                 echohl None
                             endif
                         endif " interface name
@@ -424,9 +421,9 @@ function! vlsi#portIterator(portList, formatter, suffix='', prefix='', expand=v:
                             let a:elem_max_size[key] = 0
                         endif
                         let val = l:portdef[key]
-                        if type(val) == v:t_number || type(val) == v:t_string || type(val) == v:t_float
+                        if type(val) == type(0) || type(val) == type("") || type(val) == type(0.1)
                             let a:elem_max_size[key] = (a:elem_max_size[key] < len(val) ?
-                                                        \ len(val) : a:elem_max_size[key])
+                                        \ len(val) : a:elem_max_size[key])
                         endif
                     endfor "align-pass
                 endif "field size computation / port generation
@@ -461,9 +458,9 @@ endfunction
 "
 " the (start|end)_* formatters are called with #{module_name: 'module name', prefix:'...', suffix:'...'} argument
 " the generics_item_func formatter will be called with g:modules.moduleName.generics items
-" the port_list_func formatter will be called by vlsi#portIterator enhanced g:modules.moduleName.ports
+" the port_list_func formatter will be called by vlsi#PortIterator enhanced g:modules.moduleName.ports
 "
-function! vlsi#GenericPaste(patterns, moduleName='', suffix='', prefix='', expand=v:false)
+function! vlsi#GenericPaste(patterns, moduleName='', suffix='', prefix='', expand=0)
     let result = ""
     " Fool-proof
     if !exists('g:modules')
@@ -486,7 +483,7 @@ function! vlsi#GenericPaste(patterns, moduleName='', suffix='', prefix='', expan
 
     if !has_key(g:modules,moduleName)
         echohl ErrorMsg
-        echo "Module " .. moduleName .. " doesn't exist"
+        echo "Module " . moduleName . " doesn't exist"
         echohl WarningMsg
         echo "(Maybe VlsiYank it first?)"
         echohl None
@@ -522,10 +519,10 @@ function! vlsi#GenericPaste(patterns, moduleName='', suffix='', prefix='', expan
     " ports
     if has_key(mod_def,'ports') && !empty(mod_def.ports)
         let result .= vlsi#basicFormat(mod_val,a:patterns.start_ports)
-        let port_lines = vlsi#portIterator(
-            \ mod_def.ports,
-            \ a:patterns.port_list_func,
-            \ a:suffix, a:prefix, a:expand)
+        let port_lines = vlsi#PortIterator(
+                    \ mod_def.ports,
+                    \ a:patterns.port_list_func,
+                    \ a:suffix, a:prefix, a:expand)
         " assemble ports
         let result .= join(port_lines, a:patterns.port_list_sep)
         let result .= vlsi#basicFormat(mod_val,a:patterns.end_ports)
@@ -539,7 +536,7 @@ function! vlsi#GenericPaste(patterns, moduleName='', suffix='', prefix='', expan
     "construct padding of spaces (with the size of current column)
     let padding = printf(printf("%%%ds",col('.')),'')
     " add the padding after each linebreak
-    let l:result = substitute(padding .. result, "\x01", "\x01" .. padding, 'g')
+    let l:result = substitute(padding . result, "\x01", "\x01" . padding, 'g')
     " cleanup unused spaces
     let l:result = substitute(l:result,"\x01\s\+\x01","\x01\x01",'g')
     " split on \x01
@@ -548,5 +545,5 @@ function! vlsi#GenericPaste(patterns, moduleName='', suffix='', prefix='', expan
     " append result at cursor position
     call append(line('.'), l:result )
     " move to the end of inserted text
-    exec "norm " .. l:result_count .. "j"
+    exec "norm " . l:result_count . "j"
 endfunction

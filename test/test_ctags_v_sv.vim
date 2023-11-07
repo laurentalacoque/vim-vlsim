@@ -6,7 +6,7 @@
 " where are we?
 let s:here= expand('<sfile>:p:h')
 
-let s:tctags = unittest#testcase#new("Test ctags generation for SystemVerilog", {'data' : s:here .. '/ressources/test_ctags.sv'})
+let s:tctags = unittest#testcase#new("Test ctags generation for SystemVerilog", {'data' : s:here . '/ressources/test_ctags.sv'})
 
 "--------------------------------------------------------------------------------
 " Setup and Teardown
@@ -15,9 +15,9 @@ let s:tctags = unittest#testcase#new("Test ctags generation for SystemVerilog", 
 
 function! s:tctags.SETUP()
     let datafile = s:tctags.data.file
-    let ctags_exec = s:here .. "/../bin/ctags/systemverilog.pl"
+    let ctags_exec = s:here . "/../bin/ctags/systemverilog.pl"
     call self.puts(ctags_exec)
-    let self.ctags_out = systemlist(ctags_exec .. " " .. datafile)
+    let self.ctags_out = systemlist(ctags_exec . " " . datafile)
     "let self.ctags_out = systemlist("cat ~/temp/ctags")
 endfunction
 
@@ -112,7 +112,7 @@ function s:tctags.test_v_sv_ctags_structure_valid()
         if !len(ml)
             "invalid line
             let invalid_line_count +=1
-            call self.puts("Invalid format for line["..line_num.."]: "..line)
+            call self.puts("Invalid format for line[".line_num."]: ".line)
         else
             " valid line
             let tag    = ml[1]
@@ -124,7 +124,7 @@ function s:tctags.test_v_sv_ctags_structure_valid()
             let kind   = matchstr(trim(fields[0]),'^\(kind:\)\?\zs\w$')
             if  kind ==# '' || kind !~# valid_kinds
                 let invalid_kind_count +=1
-                call self.puts("Invalid kind for tag '"..tag.."' : '"..kind.."'")
+                call self.puts("Invalid kind for tag '".tag."' : '".kind."'")
                 let parsed_fields.kind = ''
             else
                 "Valid kind
@@ -134,13 +134,13 @@ function s:tctags.test_v_sv_ctags_structure_valid()
                 if kind ==# 'm'
                     if has_key(modules,tag)
                         let duplicate_modules_count +=1
-                        call self.puts("Duplicate module '"..tag.."'")
+                        call self.puts("Duplicate module '".tag."'")
                     endif
                     let modules[tag] = 1
                 elseif kind ==# 'I'
                     if has_key(interfaces,tag)
                         let duplicate_interfaces_count +=1
-                        call self.puts("Duplicate interface '"..tag.."'")
+                        call self.puts("Duplicate interface '".tag."'")
                     endif
                     let interfaces[tag] = 1
                 endif
@@ -151,7 +151,7 @@ function s:tctags.test_v_sv_ctags_structure_valid()
                 let fl = matchlist(curfield,'^\(\w\+\):\(.*\)$')
                 if len(fl) == 0
                     let invalid_field_count +=1
-                    call self.puts("Invalid field for tag '".. tag .."' : '".. curfield .."'")
+                    call self.puts("Invalid field for tag '". tag ."' : '". curfield ."'")
                 else
                     let fieldname = fl[1]
                     let fieldvalue= fl[2]
@@ -161,19 +161,19 @@ function s:tctags.test_v_sv_ctags_structure_valid()
             " check for file field
             if !has_key(parsed_fields, 'file')
                 let invalid_field_file_count +=1
-                call self.puts("missing 'file:' field for tag '"..tag.."'")
+                call self.puts("missing 'file:' field for tag '".tag."'")
             endif
             " check for line field
             if !has_key(parsed_fields, 'line')
                 let invalid_field_line_count +=1
-                call self.puts("missing 'line:' field for tag '"..tag.."'")
+                call self.puts("missing 'line:' field for tag '".tag."'")
             endif
 
             " check for unknown field
             for fname in keys(parsed_fields)
                 if !has_key(all_valid_field_names, fname)
                     let extraneous_fields_count +=1
-                    call self.puts("Unknown field '"..fname.."' for tag '"..tag.."'")
+                    call self.puts("Unknown field '".fname."' for tag '".tag."'")
                 endif
             endfor
 
@@ -182,14 +182,14 @@ function s:tctags.test_v_sv_ctags_structure_valid()
         endif " is valid line
     endfor " foreach line in file
 
-    call self.assert_equal(0,invalid_line_count,"ctags contains "..invalid_line_count.." invalid lines")
-    call self.assert_equal(0,invalid_kind_count,"ctags contains "..invalid_kind_count.." invalid kinds")
-    call self.assert_equal(0,invalid_field_count,"ctags contains "..invalid_field_count.." invalid fields")
-    call self.assert_equal(0,invalid_field_file_count,"ctags contains "..invalid_field_file_count.. " missing 'file:' fields")
-    call self.assert_equal(0,invalid_field_line_count,"ctags contains "..invalid_field_line_count.. " missing 'line:' fields")
-    call self.assert_equal(0,extraneous_fields_count,"ctags contains "..extraneous_fields_count .. " unknown fields")
-    call self.assert_equal(0,duplicate_modules_count,"ctags contains "..duplicate_modules_count .. " duplicate modules")
-    call self.assert_equal(0,duplicate_interfaces_count,"ctags contains "..duplicate_interfaces_count .. " duplicate interfaces")
+    call self.assert_equal(0,invalid_line_count,"ctags contains ".invalid_line_count." invalid lines")
+    call self.assert_equal(0,invalid_kind_count,"ctags contains ".invalid_kind_count." invalid kinds")
+    call self.assert_equal(0,invalid_field_count,"ctags contains ".invalid_field_count." invalid fields")
+    call self.assert_equal(0,invalid_field_file_count,"ctags contains ".invalid_field_file_count. " missing 'file:' fields")
+    call self.assert_equal(0,invalid_field_line_count,"ctags contains ".invalid_field_line_count. " missing 'line:' fields")
+    call self.assert_equal(0,extraneous_fields_count,"ctags contains ".extraneous_fields_count . " unknown fields")
+    call self.assert_equal(0,duplicate_modules_count,"ctags contains ".duplicate_modules_count . " duplicate modules")
+    call self.assert_equal(0,duplicate_interfaces_count,"ctags contains ".duplicate_interfaces_count . " duplicate interfaces")
 
     let element_in_element_count = 0
     let dual_scope_count = 0
@@ -202,14 +202,14 @@ function s:tctags.test_v_sv_ctags_structure_valid()
         if pl.kind =~# '[mI]'
             "element, shouldn't have a scope
             if has_key(pl.fields,'module') || has_key(pl.fields,'interface')
-                call self.puts("Element '"..pl.tag.."' shouldn't have a scope")
+                call self.puts("Element '".pl.tag."' shouldn't have a scope")
                 let element_in_element_count +=1
             endif
         endif "module or interface
 
         " check for invalid 'fields.module' scope fields
         if has_key(pl.fields,'module') && has_key(pl.fields,'interface')
-            call self.puts("Element '"..pl.tag.."' has dual module and interface scopes')
+            call self.puts("Element '".pl.tag."' has dual module and interface scopes')
             let dual_scope_count +=1
         else
             "Check if the element has a scope
@@ -229,18 +229,18 @@ function s:tctags.test_v_sv_ctags_structure_valid()
                 let parsed_scope = split(scope,'::')
                 if len(parsed_scope) != 2
                     let invalid_scope_count +=1
-                    call self.puts("Element '"..pl.tag.."' has invalid scope '"..scope.."'")
+                    call self.puts("Element '".pl.tag."' has invalid scope '".scope."'")
                 else
                     "module :: ports kind of scope
                     "parsed_scope[0] should be a valid module or interface
                     "parsed_scope[1] should be a valid scope target
                     if !has_key(elements, parsed_scope[0])
                         let invalid_scope_reference_count +=1
-                        call self.puts("Element '"..pl.tag.."' has unexisting reference scope '"..parsed_scope[0].."'")
+                        call self.puts("Element '".pl.tag."' has unexisting reference scope '".parsed_scope[0]."'")
                     endif
                     if !has_key(all_valid_scope_targets, parsed_scope[1])
                         let invalid_scope_target_count +=1
-                        call self.puts("Element '"..pl.tag.."' has invalid scope target '"..parsed_scope[1].."'")
+                        call self.puts("Element '".pl.tag."' has invalid scope target '".parsed_scope[1]."'")
                     endif
                 endif
             endif
@@ -259,7 +259,7 @@ function s:tctags.test_v_sv_ctags_structure_valid()
         let obj = s:lookfor(parsed_lines,tag)
         if type(obj) == type(0) && obj == 0
             " failed to find it
-            call self.assert(0,"Missing expected tag "..tag)
+            call self.assert(0,"Missing expected tag ".tag)
         else
             "found it
             "compare wanted fields
@@ -267,10 +267,10 @@ function s:tctags.test_v_sv_ctags_structure_valid()
             for key in keys(expected_fields)
                 if !has_key(obj.fields,key)
                     " object doesn't have the mandatory field
-                    call self.assert(0,"missing field "..key.." in object '".tag."'")
+                    call self.assert(0,"missing field ".key." in object '".tag."'")
                 else
                     " object has key, compare values
-                    call self.assert_equal(expected_fields[key], obj.fields[key], "value mismatch for field '"..key.."' of object '"..tag.."'")
+                    call self.assert_equal(expected_fields[key], obj.fields[key], "value mismatch for field '".key."' of object '".tag."'")
                 endif
             endfor "foreach compared fields
         endif " object 'tag' found

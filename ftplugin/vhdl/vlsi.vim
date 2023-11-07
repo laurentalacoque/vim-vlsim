@@ -4,14 +4,14 @@ let b:VlsiPasteAsDefinition = function('vlsi#GenericPaste',[vlsi#vhdl#formatPatt
 let b:VlsiPasteAsInterface  = function('vlsi#GenericPaste',[vlsi#vhdl#formatPatterns.component])
 let b:VlsiPasteAsInstance   = function('vlsi#GenericPaste',[vlsi#vhdl#formatPatterns.instance])
 let b:VlsiPasteSignals      = function('vlsi#GenericPaste',[vlsi#vhdl#formatPatterns.signals])
-let b:vlsi_config           = #{
-            \ language: "vhdl",
-            \ comment : "--",
-            \ default_scalar_type:'std_logic',
-            \ default_vector_type:'std_logic_vector',
-            \ entity_regexp       : #{begin:'\c^\s*\(entity\|component\)', end:'\c^\s*end'},
-            \ kind2dir : #{i:'in', o:'out', io:'inout'},
-            \ formatRange:function("vlsi#vhdl#formatRange")}
+let b:vlsi_config           = {
+            \ 'language': "vhdl",
+            \ 'comment' : "--",
+            \ 'default_scalar_type': 'std_logic',
+            \ 'default_vector_type': 'std_logic_vector',
+            \ 'entity_regexp'       : {'begin': '\c^\s*\(entity\|component\)', 'end': '\c^\s*end'},
+            \ 'kind2dir' : {'i':'in', 'o': 'out', 'io': 'inout'},
+            \ 'formatRange':function("vlsi#vhdl#formatRange")}
 " Create default bindings
 call vlsi#Bindings()
 

@@ -6,7 +6,7 @@ function! vlsi#v_sv#formatRange(port) dict
     if a:port.range_start == ''
         return ''
     endif
-    return '[' .. a:port.range_start .. ':' .. a:port.range_end .. ']'
+    return '[' . a:port.range_start . ':' . a:port.range_end . ']'
 endfunction
 
 " define the formatting function for instance IOs
@@ -14,7 +14,7 @@ function! s:instanceIOFormatter(port)
     let l:format = printf("    .%%-%ds (%%-%ds)",
                 \ a:port.max_sizes.name,
                 \ a:port.max_sizes.name + len(a:port.suffix) +len(a:port.prefix))
-    return printf(l:format, a:port.name, a:port.prefix .. a:port.name .. a:port.suffix)
+    return printf(l:format, a:port.name, a:port.prefix . a:port.name . a:port.suffix)
 endfunction
 
 " define the formatting function for instance signals
@@ -23,7 +23,7 @@ function! s:instanceSignalFormatter(port)
     let l:format = printf("%%-%ds %%-%ds %%s",
                 \ a:port.max_sizes.type,
                 \ a:port.max_sizes.range)
-    return printf(l:format, a:port.type, a:port.config.formatRange(a:port), a:port.prefix .. a:port.name .. a:port.suffix)
+    return printf(l:format, a:port.type, a:port.config.formatRange(a:port), a:port.prefix . a:port.name . a:port.suffix)
 endfunction
 
 " define the formatting function for module IOs
@@ -32,46 +32,46 @@ function! s:moduleIOFormatter(port)
                 \ a:port.max_sizes.dir,
                 \ a:port.max_sizes.type,
                 \ a:port.max_sizes.range)
-    return printf(l:format, a:port.dir, a:port.type, a:port.config.formatRange(a:port), a:port.prefix .. a:port.name .. a:port.suffix)
+    return printf(l:format, a:port.dir, a:port.type, a:port.config.formatRange(a:port), a:port.prefix . a:port.name . a:port.suffix)
 endfunction
 
-let vlsi#v_sv#formatPatterns = #{
-   \     definition : #{
-   \         start_module              : "module {module_name}",
-   \             start_generics        : " #(\x01",
-   \                generics_item_func : "    parameter {name} = {value}",
-   \                generics_sep       : ",\x01",
-   \             end_generics          : "\x01    )",
-   \             start_ports           : " (\x01",
-   \                port_list_func     : function('s:moduleIOFormatter'),
-   \                port_list_sep      : ",\x01",
-   \             end_ports             : "\x01)",
-   \         end_module                : ";\x01\x01endmodule //{module_name}\x01",
+let vlsi#v_sv#formatPatterns = {
+   \     'definition' : {
+   \         'start_module'              : "module {module_name}",
+   \             'start_generics'        : " #(\x01",
+   \                'generics_item_func' : "    parameter {name} = {value}",
+   \                'generics_sep'       : ",\x01",
+   \             'end_generics'          : "\x01    )",
+   \             'start_ports'           : " (\x01",
+   \                'port_list_func'     : function('s:moduleIOFormatter'),
+   \                'port_list_sep'      : ",\x01",
+   \             'end_ports'             : "\x01)",
+   \         'end_module'                : ";\x01\x01endmodule //{module_name}\x01",
    \     },
-   \     instance : #{
-   \         start_module              : "{module_name}",
-   \             start_generics        : " #(\x01",
-   \                generics_item_func : "    .{name} ({value})",
-   \                generics_sep       : ",\x01",
-   \             end_generics          : "\x01  )",
-   \             gen2port              : " u_{prefix}{module_name}{suffix}",
-   \             start_ports           : " (\x01",
-   \                port_list_func     : function('s:instanceIOFormatter'),
-   \                port_list_sep      : ",\x01",
-   \             end_ports             : "\x01)",
-   \         end_module                : ";\x01\x01",
+   \     'instance' : {
+   \         'start_module'              : "{module_name}",
+   \             'start_generics'        : " #(\x01",
+   \                'generics_item_func' : "    .{name} ({value})",
+   \                'generics_sep'       : ",\x01",
+   \             'end_generics'          : "\x01  )",
+   \             'gen2port'              : " u_{prefix}{module_name}{suffix}",
+   \             'start_ports'           : " (\x01",
+   \                'port_list_func'     : function('s:instanceIOFormatter'),
+   \                'port_list_sep'      : ",\x01",
+   \             'end_ports'             : "\x01)",
+   \         'end_module'                : ";\x01\x01",
    \     },
-   \     signals  : #{
-   \         start_module              : '',
-   \             start_generics        : '',
-   \                generics_item_func : '',
-   \                generics_sep       : '',
-   \             end_generics          : '',
-   \             start_ports           : "// interface signals for {prefix}{module_name}{suffix}\x01",
-   \                port_list_func     : function('s:instanceSignalFormatter'),
-   \                port_list_sep      : ";\x01",
-   \             end_ports             : ";\x01",
-   \         end_module                : "// end of signals for {prefix}{module_name}{suffix}\x01\x01",
+   \     'signals'  : {
+   \         'start_module'              : '',
+   \             'start_generics'        : '',
+   \                'generics_item_func' : '',
+   \                'generics_sep'       : '',
+   \             'end_generics'          : '',
+   \             'start_ports'           : "// interface signals for {prefix}{module_name}{suffix}\x01",
+   \                'port_list_func'     : function('s:instanceSignalFormatter'),
+   \                'port_list_sep'      : ";\x01",
+   \             'end_ports'             : ";\x01",
+   \         'end_module'                : "// end of signals for {prefix}{module_name}{suffix}\x01\x01",
    \     },
    \ }
 
