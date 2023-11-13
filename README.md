@@ -1,3 +1,5 @@
+[![Automated tests for Continuous Integration](https://github.com/laurentalacoque/vim-vlsim/actions/workflows/main.yml/badge.svg)](https://github.com/laurentalacoque/vim-vlsim/actions/workflows/main.yml)
+
 vim-vlsi : useful scripts for VLSI design
 =========================================
 

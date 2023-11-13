@@ -105,3 +105,6 @@ function! s:tc.test_basicFormat_calls()
         endif
     endif
 endfunction
+" }}}
+
+"vim: :fdm=marker

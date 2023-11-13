@@ -63,8 +63,8 @@ endfunction
 " Compare yanked module to provided module_data
 function! s:goto_yank_compare_module(label, module_data) dict
     call self.data.goto(a:label)
-    VlsiYank
-    call self.assert(has_key(g:modules,a:label), "capture failed for ".a:label)
+    silent VlsiYank
+    call self.assert(has_key(g:modules,a:label), "capture failed for "..a:label)
     call self.assert_module_equals(a:module_data, g:modules[a:label])
 endfunction
 
@@ -298,8 +298,8 @@ endfunction
 " {{{ 
 "
 function! s:tc.test_v_yankall()
-    let  l:command = "VlsiYankAll ".s:here."/ressources/test_file.v"
-    execute l:command
+    let  l:command = "VlsiYankAll "..s:here.."/ressources/test_file.v"
+    silent execute l:command
     
     if self.assert_exists('g:modules', "VlsiYankAll: no module captured")
         for modname in [
