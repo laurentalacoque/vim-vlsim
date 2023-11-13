@@ -115,83 +115,83 @@ let s:default_interface = {'if':
                 \'lang': 'systemverilog'}}
 
 " Modules to paste
-let s:default_modules = #{
-        \ modg0p0: #{
-            \ lang     : 'systemverilog',
-            \ generics : [],
-            \ ports    : [],
+let s:default_modules = {
+        \ 'modg0p0': {
+            \ 'lang'     : 'systemverilog',
+            \ 'generics' : [],
+            \ 'ports'    : [],
         \ },
         \
-        \ modg0p1: #{
-            \ lang     : 'systemverilog',
-            \ generics : [],
-            \ ports    : [
-                \#{ name:'port1', type:'', range:'', dir:'i' },
-            \ ],
-        \ },
-        \
-        \ modg0p1_with_range: #{
-            \ lang     : 'systemverilog',
-            \ generics : [],
-            \ ports    : [
-                \#{ name:'port1', type:'', range:'size{{:}}0', dir:'i' },
+        \ 'modg0p1': {
+            \ 'lang'     : 'systemverilog',
+            \ 'generics' : [],
+            \ 'ports'    : [
+                \{ 'name':'port1', 'type':'', 'range':'', 'dir':'i' },
             \ ],
         \ },
         \
-        \ modg0p1_with_interface: #{
-            \ lang     : 'systemverilog',
-            \ generics : [],
-            \ ports    : [
-                \#{ name:'port1', type:'if.slave', range:'', dir:'i' },
+        \ 'modg0p1_with_range': {
+            \ 'lang'     : 'systemverilog',
+            \ 'generics' : [],
+            \ 'ports'    : [
+                \{ 'name':'port1', 'type':'', 'range':'size{{:}}0', 'dir':'i' },
             \ ],
         \ },
         \
-        \ modg1p0: #{
-            \ lang     : 'systemverilog',
-            \ generics : [
-                \ #{ name:'param1', type:'natural', value:'1'},
-            \ ],
-            \ ports    : []
-        \ },
-        \
-        \ modg1p1: #{
-            \ lang     : 'systemverilog',
-            \ generics : [
-                \ #{ name:'param1', type:'natural', value:'1'},
-            \ ],
-            \ ports    : [
-                \#{ name:'port1', type:'', range:'', dir:'i' },
-            \ ],
-        \ },
-        \ modg2p0: #{
-            \ lang     : 'systemverilog',
-            \ generics : [
-                \ #{ name:'param1', type:'natural', value:'1'},
-                \ #{ name:'param2', type:'natural', value:'2'},
-            \ ],
-            \ ports    : []
-        \ },
-        \
-        \ modg0p3: #{
-            \ lang     : 'systemverilog',
-            \ generics : [],
-            \ ports    : [
-                \#{ name:'port1', type:'', range:'', dir:'i' },
-                \#{ name:'port2', type:'', range:'', dir:'o' },
-                \#{ name:'port3', type:'', range:'', dir:'io' },
+        \ 'modg0p1_with_interface': {
+            \ 'lang'     : 'systemverilog',
+            \ 'generics' : [],
+            \ 'ports'    : [
+                \{ 'name':'port1', 'type':'if.slave', 'range':'', 'dir':'i' },
             \ ],
         \ },
         \
-        \ modg2p3: #{
-            \ lang     : 'systemverilog',
-            \ generics : [
-                \ #{ name:'param1', type:'natural', value:'1'},
-                \ #{ name:'param2', type:'natural', value:'2'},
+        \ 'modg1p0': {
+            \ 'lang'     : 'systemverilog',
+            \ 'generics' : [
+                \ { 'name':'param1', 'type':'natural', 'value':'1'},
             \ ],
-            \ ports    : [
-                \#{ name:'port1', type:'', range:'', dir:'i' },
-                \#{ name:'port2', type:'', range:'', dir:'o' },
-                \#{ name:'port3', type:'', range:'', dir:'io' },
+            \ 'ports'    : []
+        \ },
+        \
+        \ 'modg1p1': {
+            \ 'lang'     : 'systemverilog',
+            \ 'generics' : [
+                \ { 'name':'param1', 'type':'natural', 'value':'1'},
+            \ ],
+            \ 'ports'    : [
+                \{ 'name':'port1', 'type':'', 'range':'', 'dir':'i' },
+            \ ],
+        \ },
+        \ 'modg2p0': {
+            \ 'lang'     : 'systemverilog',
+            \ 'generics' : [
+                \ { 'name':'param1', 'type':'natural', 'value':'1'},
+                \ { 'name':'param2', 'type':'natural', 'value':'2'},
+            \ ],
+            \ 'ports'    : []
+        \ },
+        \
+        \ 'modg0p3': {
+            \ 'lang'     : 'systemverilog',
+            \ 'generics' : [],
+            \ 'ports'    : [
+                \{ 'name':'port1', 'type':'', 'range':'', 'dir':'i' },
+                \{ 'name':'port2', 'type':'', 'range':'', 'dir':'o' },
+                \{ 'name':'port3', 'type':'', 'range':'', 'dir':'io' },
+            \ ],
+        \ },
+        \
+        \ 'modg2p3': {
+            \ 'lang'     : 'systemverilog',
+            \ 'generics' : [
+                \ { 'name':'param1', 'type':'natural', 'value':'1'},
+                \ { 'name':'param2', 'type':'natural', 'value':'2'},
+            \ ],
+            \ 'ports'    : [
+                \{ 'name':'port1', 'type':'', 'range':'', 'dir':'i' },
+                \{ 'name':'port2', 'type':'', 'range':'', 'dir':'o' },
+                \{ 'name':'port3', 'type':'', 'range':'', 'dir':'io' },
             \ ],
         \ },
 \ }
@@ -201,203 +201,203 @@ let s:default_modules = #{
 " {{{ 2
 
 " Reference for SystemVerilog
-let s:reference = #{
-            \ modg0p0 : #{
-                \ VlsiPasteAsDefinition : "module modg0p0; endmodule",
-                \ VlsiPasteAsInstance   : "modg0p0 u_modg0p0;",
-                \ VlsiPasteSignals      : "",
+let s:reference = {
+            \ 'modg0p0' : {
+                \ 'VlsiPasteAsDefinition' : "module modg0p0; endmodule",
+                \ 'VlsiPasteAsInstance'   : "modg0p0 u_modg0p0;",
+                \ 'VlsiPasteSignals'      : "",
             \},
-            \ modg0p1 : #{
-                \ VlsiPasteAsDefinition : "module modg0p1 ( input logic port1 ); endmodule",
-                \ VlsiPasteAsInstance   : "modg0p1 u_modg0p1 ( .port1 (port1) );",
-                \ VlsiPasteSignals      : "logic port1;",
+            \ 'modg0p1' : {
+                \ 'VlsiPasteAsDefinition' : "module modg0p1 ( input logic port1 ); endmodule",
+                \ 'VlsiPasteAsInstance'   : "modg0p1 u_modg0p1 ( .port1 (port1) );",
+                \ 'VlsiPasteSignals'      : "logic port1;",
             \},
-            \ modg0p1_with_range : #{
-                \ VlsiPasteAsDefinition : "module modg0p1_with_range ( input logic [size:0] port1 ); endmodule",
-                \ VlsiPasteAsInstance   : "modg0p1_with_range u_modg0p1_with_range ( .port1 (port1) );",
-                \ VlsiPasteSignals      : "logic [size:0] port1;",
+            \ 'modg0p1_with_range' : {
+                \ 'VlsiPasteAsDefinition' : "module modg0p1_with_range ( input logic [size:0] port1 ); endmodule",
+                \ 'VlsiPasteAsInstance'   : "modg0p1_with_range u_modg0p1_with_range ( .port1 (port1) );",
+                \ 'VlsiPasteSignals'      : "logic [size:0] port1;",
             \},
-            \ modg0p1_with_interface : #{
-                \ VlsiPasteAsDefinition : "module modg0p1_with_interface ( if.slave port1 ); endmodule",
-                \ VlsiPasteAsInstance   : "modg0p1_with_interface u_modg0p1_with_interface ( .port1 (port1) );",
-                \ VlsiPasteSignals      : "if.slave port1;",
+            \ 'modg0p1_with_interface' : {
+                \ 'VlsiPasteAsDefinition' : "module modg0p1_with_interface ( if.slave port1 ); endmodule",
+                \ 'VlsiPasteAsInstance'   : "modg0p1_with_interface u_modg0p1_with_interface ( .port1 (port1) );",
+                \ 'VlsiPasteSignals'      : "if.slave port1;",
             \},
-            \ modg1p0 : #{
-                \ VlsiPasteAsDefinition : "module modg1p0 #( parameter param1 = 1 ); endmodule",
-                \ VlsiPasteAsInstance   : "modg1p0 #( .param1 (1) ) u_modg1p0;",
-                \ VlsiPasteSignals      : "",
+            \ 'modg1p0' : {
+                \ 'VlsiPasteAsDefinition' : "module modg1p0 #( parameter param1 = 1 ); endmodule",
+                \ 'VlsiPasteAsInstance'   : "modg1p0 #( .param1 (1) ) u_modg1p0;",
+                \ 'VlsiPasteSignals'      : "",
             \},
-            \ modg1p1 : #{
-                \ VlsiPasteAsDefinition : "module modg1p1 #( parameter param1 = 1 ) ( input logic port1 ); endmodule",
-                \ VlsiPasteAsInstance   : "modg1p1 #( .param1 (1) ) u_modg1p1 ( .port1 (port1) );",
-                \ VlsiPasteSignals      : "logic port1;",
+            \ 'modg1p1' : {
+                \ 'VlsiPasteAsDefinition' : "module modg1p1 #( parameter param1 = 1 ) ( input logic port1 ); endmodule",
+                \ 'VlsiPasteAsInstance'   : "modg1p1 #( .param1 (1) ) u_modg1p1 ( .port1 (port1) );",
+                \ 'VlsiPasteSignals'      : "logic port1;",
             \},
-            \ modg2p0 : #{
-                \ VlsiPasteAsDefinition : "module modg2p0 #( parameter param1 = 1, parameter param2 = 2 ); endmodule",
-                \ VlsiPasteAsInstance   : "modg2p0 #( .param1 (1), .param2 (2) ) u_modg2p0;",
-                \ VlsiPasteSignals      : "",
+            \ 'modg2p0' : {
+                \ 'VlsiPasteAsDefinition' : "module modg2p0 #( parameter param1 = 1, parameter param2 = 2 ); endmodule",
+                \ 'VlsiPasteAsInstance'   : "modg2p0 #( .param1 (1), .param2 (2) ) u_modg2p0;",
+                \ 'VlsiPasteSignals'      : "",
             \},
-            \ modg0p3 : #{
-                \ VlsiPasteAsDefinition : "module modg0p3 ( input logic port1, output logic port2, inout logic port3 ); endmodule",
-                \ VlsiPasteAsInstance   : "modg0p3 u_modg0p3 ( .port1 (port1), .port2 (port2), .port3 (port3) );",
-                \ VlsiPasteSignals      : "logic port1; logic port2; logic port3;",
+            \ 'modg0p3' : {
+                \ 'VlsiPasteAsDefinition' : "module modg0p3 ( input logic port1, output logic port2, inout logic port3 ); endmodule",
+                \ 'VlsiPasteAsInstance'   : "modg0p3 u_modg0p3 ( .port1 (port1), .port2 (port2), .port3 (port3) );",
+                \ 'VlsiPasteSignals'      : "logic port1; logic port2; logic port3;",
             \},
-            \ modg2p3 : #{
-                \ VlsiPasteAsDefinition : "module modg2p3 #( parameter param1 = 1, parameter param2 = 2 ) ( input logic port1, output logic port2, inout logic port3 ); endmodule",
-                \ VlsiPasteAsInstance   : "modg2p3 #( .param1 (1), .param2 (2) ) u_modg2p3 ( .port1 (port1), .port2 (port2), .port3 (port3) );",
-                \ VlsiPasteSignals      : "logic port1; logic port2; logic port3;",
+            \ 'modg2p3' : {
+                \ 'VlsiPasteAsDefinition' : "module modg2p3 #( parameter param1 = 1, parameter param2 = 2 ) ( input logic port1, output logic port2, inout logic port3 ); endmodule",
+                \ 'VlsiPasteAsInstance'   : "modg2p3 #( .param1 (1), .param2 (2) ) u_modg2p3 ( .port1 (port1), .port2 (port2), .port3 (port3) );",
+                \ 'VlsiPasteSignals'      : "logic port1; logic port2; logic port3;",
             \},
 \}
 
 " Reference for Verilog
-let s:reference_verilog = #{
-            \ modg0p0 : #{
-                \ VlsiPasteAsDefinition : "module modg0p0; endmodule",
-                \ VlsiPasteAsInstance   : "modg0p0 u_modg0p0;",
-                \ VlsiPasteSignals      : "",
+let s:reference_verilog = {
+            \ 'modg0p0' : {
+                \ 'VlsiPasteAsDefinition' : "module modg0p0; endmodule",
+                \ 'VlsiPasteAsInstance'   : "modg0p0 u_modg0p0;",
+                \ 'VlsiPasteSignals'      : "",
             \},
-            \ modg0p1 : #{
-                \ VlsiPasteAsDefinition : "module modg0p1 ( input wire port1 ); endmodule",
-                \ VlsiPasteAsInstance   : "modg0p1 u_modg0p1 ( .port1 (port1) );",
-                \ VlsiPasteSignals      : "wire port1;",
+            \ 'modg0p1' : {
+                \ 'VlsiPasteAsDefinition' : "module modg0p1 ( input wire port1 ); endmodule",
+                \ 'VlsiPasteAsInstance'   : "modg0p1 u_modg0p1 ( .port1 (port1) );",
+                \ 'VlsiPasteSignals'      : "wire port1;",
             \},
-            \ modg0p1_with_range : #{
-                \ VlsiPasteAsDefinition : "module modg0p1_with_range ( input wire [size:0] port1 ); endmodule",
-                \ VlsiPasteAsInstance   : "modg0p1_with_range u_modg0p1_with_range ( .port1 (port1) );",
-                \ VlsiPasteSignals      : "wire [size:0] port1;",
+            \ 'modg0p1_with_range' : {
+                \ 'VlsiPasteAsDefinition' : "module modg0p1_with_range ( input wire [size:0] port1 ); endmodule",
+                \ 'VlsiPasteAsInstance'   : "modg0p1_with_range u_modg0p1_with_range ( .port1 (port1) );",
+                \ 'VlsiPasteSignals'      : "wire [size:0] port1;",
             \},
-            \ modg0p1_with_interface : #{
-                \ VlsiPasteAsDefinition : "module modg0p1_with_interface ( input wire [31:0] port1_sig1, output wire port1_sig2 ); endmodule",
-                \ VlsiPasteAsInstance   : "modg0p1_with_interface u_modg0p1_with_interface ( .port1_sig1 (port1_sig1), .port1_sig2 (port1_sig2) );",
-                \ VlsiPasteSignals      : "wire [31:0] port1_sig1; wire port1_sig2;",
+            \ 'modg0p1_with_interface' : {
+                \ 'VlsiPasteAsDefinition' : "module modg0p1_with_interface ( input wire [31:0] port1_sig1, output wire port1_sig2 ); endmodule",
+                \ 'VlsiPasteAsInstance'   : "modg0p1_with_interface u_modg0p1_with_interface ( .port1_sig1 (port1_sig1), .port1_sig2 (port1_sig2) );",
+                \ 'VlsiPasteSignals'      : "wire [31:0] port1_sig1; wire port1_sig2;",
             \},
-            \ modg1p0 : #{
-                \ VlsiPasteAsDefinition : "module modg1p0 #( parameter param1 = 1 ); endmodule",
-                \ VlsiPasteAsInstance   : "modg1p0 #( .param1 (1) ) u_modg1p0;",
-                \ VlsiPasteSignals      : "",
+            \ 'modg1p0' : {
+                \ 'VlsiPasteAsDefinition' : "module modg1p0 #( parameter param1 = 1 ); endmodule",
+                \ 'VlsiPasteAsInstance'   : "modg1p0 #( .param1 (1) ) u_modg1p0;",
+                \ 'VlsiPasteSignals'      : "",
             \},
-            \ modg1p1 : #{
-                \ VlsiPasteAsDefinition : "module modg1p1 #( parameter param1 = 1 ) ( input wire port1 ); endmodule",
-                \ VlsiPasteAsInstance   : "modg1p1 #( .param1 (1) ) u_modg1p1 ( .port1 (port1) );",
-                \ VlsiPasteSignals      : "wire port1;",
+            \ 'modg1p1' : {
+                \ 'VlsiPasteAsDefinition' : "module modg1p1 #( parameter param1 = 1 ) ( input wire port1 ); endmodule",
+                \ 'VlsiPasteAsInstance'   : "modg1p1 #( .param1 (1) ) u_modg1p1 ( .port1 (port1) );",
+                \ 'VlsiPasteSignals'      : "wire port1;",
             \},
-            \ modg2p0 : #{
-                \ VlsiPasteAsDefinition : "module modg2p0 #( parameter param1 = 1, parameter param2 = 2 ); endmodule",
-                \ VlsiPasteAsInstance   : "modg2p0 #( .param1 (1), .param2 (2) ) u_modg2p0;",
-                \ VlsiPasteSignals      : "",
+            \ 'modg2p0' : {
+                \ 'VlsiPasteAsDefinition' : "module modg2p0 #( parameter param1 = 1, parameter param2 = 2 ); endmodule",
+                \ 'VlsiPasteAsInstance'   : "modg2p0 #( .param1 (1), .param2 (2) ) u_modg2p0;",
+                \ 'VlsiPasteSignals'      : "",
             \},
-            \ modg0p3 : #{
-                \ VlsiPasteAsDefinition : "module modg0p3 ( input wire port1, output wire port2, inout wire port3 ); endmodule",
-                \ VlsiPasteAsInstance   : "modg0p3 u_modg0p3 ( .port1 (port1), .port2 (port2), .port3 (port3) );",
-                \ VlsiPasteSignals      : "wire port1; wire port2; wire port3;",
+            \ 'modg0p3' : {
+                \ 'VlsiPasteAsDefinition' : "module modg0p3 ( input wire port1, output wire port2, inout wire port3 ); endmodule",
+                \ 'VlsiPasteAsInstance'   : "modg0p3 u_modg0p3 ( .port1 (port1), .port2 (port2), .port3 (port3) );",
+                \ 'VlsiPasteSignals'      : "wire port1; wire port2; wire port3;",
             \},
-            \ modg2p3 : #{
-                \ VlsiPasteAsDefinition : "module modg2p3 #( parameter param1 = 1, parameter param2 = 2 ) ( input wire port1, output wire port2, inout wire port3 ); endmodule",
-                \ VlsiPasteAsInstance   : "modg2p3 #( .param1 (1), .param2 (2) ) u_modg2p3 ( .port1 (port1), .port2 (port2), .port3 (port3) );",
-                \ VlsiPasteSignals      : "wire port1; wire port2; wire port3;",
+            \ 'modg2p3' : {
+                \ 'VlsiPasteAsDefinition' : "module modg2p3 #( parameter param1 = 1, parameter param2 = 2 ) ( input wire port1, output wire port2, inout wire port3 ); endmodule",
+                \ 'VlsiPasteAsInstance'   : "modg2p3 #( .param1 (1), .param2 (2) ) u_modg2p3 ( .port1 (port1), .port2 (port2), .port3 (port3) );",
+                \ 'VlsiPasteSignals'      : "wire port1; wire port2; wire port3;",
             \},
 \}
 
 " Reference for Verilog with prefix and suffix
-let s:reference_verilog_prefix_suffix = #{
-            \ modg0p0 : {
+let s:reference_verilog_prefix_suffix = {
+            \ 'modg0p0' : {
                 \ "VlsiPasteAsInstance _s p_"   : "modg0p0 u_p_modg0p0_s;",
                 \ "VlsiPasteSignals _s p_"      : "",
             \},
-            \ modg0p1 : {
+            \ 'modg0p1' : {
                 \ "VlsiPasteAsInstance _s p_"   : "modg0p1 u_p_modg0p1_s ( .port1 (p_port1_s) );",
                 \ "VlsiPasteSignals _s p_"      : "wire p_port1_s;",
             \},
-            \ modg0p1_with_range : {
+            \ 'modg0p1_with_range' : {
                 \ "VlsiPasteAsInstance _s p_"   : "modg0p1_with_range u_p_modg0p1_with_range_s ( .port1 (p_port1_s) );",
                 \ "VlsiPasteSignals _s p_"      : "wire [size:0] p_port1_s;",
             \},
-            \ modg0p1_with_interface : {
+            \ 'modg0p1_with_interface' : {
                 \ "VlsiPasteAsInstance _s p_"   : "modg0p1_with_interface u_p_modg0p1_with_interface_s ( .port1_sig1 (p_port1_sig1_s), .port1_sig2 (p_port1_sig2_s) );",
                 \ "VlsiPasteSignals _s p_"      : "wire [31:0] p_port1_sig1_s; wire p_port1_sig2_s;",
             \},
-            \ modg1p0 : {
+            \ 'modg1p0' : {
                 \ "VlsiPasteAsInstance _s p_"   : "modg1p0 #( .param1 (1) ) u_p_modg1p0_s;",
                 \ "VlsiPasteSignals _s p_"      : "",
             \},
-            \ modg1p1 : {
+            \ 'modg1p1' : {
                 \ "VlsiPasteAsInstance _s p_"   : "modg1p1 #( .param1 (1) ) u_p_modg1p1_s ( .port1 (p_port1_s) );",
                 \ "VlsiPasteSignals _s p_"      : "wire p_port1_s;",
             \},
-            \ modg2p0 : {
+            \ 'modg2p0' : {
                 \ "VlsiPasteAsInstance _s p_"   : "modg2p0 #( .param1 (1), .param2 (2) ) u_p_modg2p0_s;",
                 \ "VlsiPasteSignals _s p_"      : "",
             \},
-            \ modg0p3 : {
+            \ 'modg0p3' : {
                 \ "VlsiPasteAsInstance _s p_"   : "modg0p3 u_p_modg0p3_s ( .port1 (p_port1_s), .port2 (p_port2_s), .port3 (p_port3_s) );",
                 \ "VlsiPasteSignals _s p_"      : "wire p_port1_s; wire p_port2_s; wire p_port3_s;",
             \},
-            \ modg2p3 : {
+            \ 'modg2p3' : {
                 \ "VlsiPasteAsInstance _s p_"   : "modg2p3 #( .param1 (1), .param2 (2) ) u_p_modg2p3_s ( .port1 (p_port1_s), .port2 (p_port2_s), .port3 (p_port3_s) );",
                 \ "VlsiPasteSignals _s p_"      : "wire p_port1_s; wire p_port2_s; wire p_port3_s;",
             \},
 \}
 
 " Reference for Verilog
-let s:reference_vhdl = #{
-            \ modg0p0 : #{
-                \ VlsiPasteAsDefinition : "entity modg0p0 is end entity modg0p0;",
-                \ VlsiPasteAsInterface  : "component modg0p0 is end component modg0p0;",
-                \ VlsiPasteAsInstance   : "u_modg0p0 : modg0p0 ;",
-                \ VlsiPasteSignals      : "",
+let s:reference_vhdl = {
+            \ 'modg0p0' : {
+                \ 'VlsiPasteAsDefinition' : "entity modg0p0 is end entity modg0p0;",
+                \ 'VlsiPasteAsInterface'  : "component modg0p0 is end component modg0p0;",
+                \ 'VlsiPasteAsInstance'   : "u_modg0p0 : modg0p0 ;",
+                \ 'VlsiPasteSignals'      : "",
             \},
-            \ modg0p1 : #{
-                \ VlsiPasteAsDefinition : "entity modg0p1 is port ( port1 : in std_logic ); end entity modg0p1;",
-                \ VlsiPasteAsInterface  : "component modg0p1 is port ( port1 : in std_logic ); end component modg0p1;",
-                \ VlsiPasteAsInstance   : "u_modg0p1 : modg0p1 port map ( port1 => port1 );",
-                \ VlsiPasteSignals      : "signal port1 : std_logic;",
+            \ 'modg0p1' : {
+                \ 'VlsiPasteAsDefinition' : "entity modg0p1 is port ( port1 : in std_logic ); end entity modg0p1;",
+                \ 'VlsiPasteAsInterface'  : "component modg0p1 is port ( port1 : in std_logic ); end component modg0p1;",
+                \ 'VlsiPasteAsInstance'   : "u_modg0p1 : modg0p1 port map ( port1 => port1 );",
+                \ 'VlsiPasteSignals'      : "signal port1 : std_logic;",
             \},
-            \ modg0p1_with_range : #{
-                \ VlsiPasteAsDefinition : "entity modg0p1_with_range is port ( port1 : in std_logic_vector(size downto 0) ); end entity modg0p1_with_range;",
-                \ VlsiPasteAsInterface  : "component modg0p1_with_range is port ( port1 : in std_logic_vector(size downto 0) ); end component modg0p1_with_range;",
-                \ VlsiPasteAsInstance   : "u_modg0p1_with_range : modg0p1_with_range port map ( port1 => port1 );",
-                \ VlsiPasteSignals      : "signal port1 : std_logic_vector(size downto 0);",
+            \ 'modg0p1_with_range' : {
+                \ 'VlsiPasteAsDefinition' : "entity modg0p1_with_range is port ( port1 : in std_logic_vector(size downto 0) ); end entity modg0p1_with_range;",
+                \ 'VlsiPasteAsInterface'  : "component modg0p1_with_range is port ( port1 : in std_logic_vector(size downto 0) ); end component modg0p1_with_range;",
+                \ 'VlsiPasteAsInstance'   : "u_modg0p1_with_range : modg0p1_with_range port map ( port1 => port1 );",
+                \ 'VlsiPasteSignals'      : "signal port1 : std_logic_vector(size downto 0);",
             \},
-            \ modg0p1_with_interface : #{
-                \ VlsiPasteAsDefinition : "entity modg0p1_with_interface is port ( port1_sig1 : in std_logic_vector(31 downto 0); port1_sig2 : out std_logic ); end entity modg0p1_with_interface;",
-                \ VlsiPasteAsInterface  : "component modg0p1_with_interface is port ( port1_sig1 : in std_logic_vector(31 downto 0); port1_sig2 : out std_logic ); end component modg0p1_with_interface;",
-                \ VlsiPasteAsInstance   : "u_modg0p1_with_interface : modg0p1_with_interface port map ( port1_sig1 => port1_sig1, port1_sig2 => port1_sig2 );",
-                \ VlsiPasteSignals      : "signal port1_sig1 : std_logic_vector(31 downto 0); signal port1_sig2 : std_logic ;",
+            \ 'modg0p1_with_interface' : {
+                \ 'VlsiPasteAsDefinition' : "entity modg0p1_with_interface is port ( port1_sig1 : in std_logic_vector(31 downto 0); port1_sig2 : out std_logic ); end entity modg0p1_with_interface;",
+                \ 'VlsiPasteAsInterface'  : "component modg0p1_with_interface is port ( port1_sig1 : in std_logic_vector(31 downto 0); port1_sig2 : out std_logic ); end component modg0p1_with_interface;",
+                \ 'VlsiPasteAsInstance'   : "u_modg0p1_with_interface : modg0p1_with_interface port map ( port1_sig1 => port1_sig1, port1_sig2 => port1_sig2 );",
+                \ 'VlsiPasteSignals'      : "signal port1_sig1 : std_logic_vector(31 downto 0); signal port1_sig2 : std_logic ;",
             \},
-            \ modg1p0 : #{
-                \ VlsiPasteAsDefinition : "entity modg1p0 is generic ( param1 : natural := 1 ); end entity modg1p0;",
-                \ VlsiPasteAsInterface  : "component modg1p0 is generic ( param1 : natural := 1 ); end component modg1p0;",
-                \ VlsiPasteAsInstance   : "u_modg1p0 : modg1p0 generic map ( param1 => 1 ) ;",
-                \ VlsiPasteSignals      : "",
+            \ 'modg1p0' : {
+                \ 'VlsiPasteAsDefinition' : "entity modg1p0 is generic ( param1 : natural := 1 ); end entity modg1p0;",
+                \ 'VlsiPasteAsInterface'  : "component modg1p0 is generic ( param1 : natural := 1 ); end component modg1p0;",
+                \ 'VlsiPasteAsInstance'   : "u_modg1p0 : modg1p0 generic map ( param1 => 1 ) ;",
+                \ 'VlsiPasteSignals'      : "",
             \},
-            \ modg1p1 : #{
-                \ VlsiPasteAsDefinition : "entity modg1p1 is generic ( param1 : natural := 1 ); port ( port1 : in std_logic ); end entity modg1p1;",
-                \ VlsiPasteAsInterface  : "component modg1p1 is generic ( param1 : natural := 1 ); port ( port1 : in std_logic ); end component modg1p1;",
-                \ VlsiPasteAsInstance   : "u_modg1p1 : modg1p1 generic map ( param1 => 1 ) port map ( port1 => port1 );",
-                \ VlsiPasteSignals      : "signal port1 : std_logic;",
+            \ 'modg1p1' : {
+                \ 'VlsiPasteAsDefinition' : "entity modg1p1 is generic ( param1 : natural := 1 ); port ( port1 : in std_logic ); end entity modg1p1;",
+                \ 'VlsiPasteAsInterface'  : "component modg1p1 is generic ( param1 : natural := 1 ); port ( port1 : in std_logic ); end component modg1p1;",
+                \ 'VlsiPasteAsInstance'   : "u_modg1p1 : modg1p1 generic map ( param1 => 1 ) port map ( port1 => port1 );",
+                \ 'VlsiPasteSignals'      : "signal port1 : std_logic;",
             \},
-            \ modg2p0 : #{
-                \ VlsiPasteAsDefinition : "entity modg2p0 is generic ( param1 : natural := 1; param2 : natural := 2 ); end entity modg2p0;",
-                \ VlsiPasteAsInterface  : "component modg2p0 is generic ( param1 : natural := 1; param2 : natural := 2 ); end component modg2p0;",
-                \ VlsiPasteAsInstance   : "u_modg2p0 : modg2p0 generic map ( param1 => 1, param2 => 2 ) ;",
-                \ VlsiPasteSignals      : "",
+            \ 'modg2p0' : {
+                \ 'VlsiPasteAsDefinition' : "entity modg2p0 is generic ( param1 : natural := 1; param2 : natural := 2 ); end entity modg2p0;",
+                \ 'VlsiPasteAsInterface'  : "component modg2p0 is generic ( param1 : natural := 1; param2 : natural := 2 ); end component modg2p0;",
+                \ 'VlsiPasteAsInstance'   : "u_modg2p0 : modg2p0 generic map ( param1 => 1, param2 => 2 ) ;",
+                \ 'VlsiPasteSignals'      : "",
             \},
-            \ modg0p3 : #{
-                \ VlsiPasteAsDefinition : "entity modg0p3 is port ( port1 : in std_logic; port2 : out std_logic; port3 : inout std_logic ); end entity modg0p3;",
-                \ VlsiPasteAsInterface  : "component modg0p3 is port ( port1 : in std_logic; port2 : out std_logic; port3 : inout std_logic ); end component modg0p3;",
-                \ VlsiPasteAsInstance   : "u_modg0p3 : modg0p3 port map ( port1 => port1, port2 => port2, port3 => port3 );",
-                \ VlsiPasteSignals      : "signal port1 : std_logic; signal port2 : std_logic; signal port3 : std_logic;",
+            \ 'modg0p3' : {
+                \ 'VlsiPasteAsDefinition' : "entity modg0p3 is port ( port1 : in std_logic; port2 : out std_logic; port3 : inout std_logic ); end entity modg0p3;",
+                \ 'VlsiPasteAsInterface'  : "component modg0p3 is port ( port1 : in std_logic; port2 : out std_logic; port3 : inout std_logic ); end component modg0p3;",
+                \ 'VlsiPasteAsInstance'   : "u_modg0p3 : modg0p3 port map ( port1 => port1, port2 => port2, port3 => port3 );",
+                \ 'VlsiPasteSignals'      : "signal port1 : std_logic; signal port2 : std_logic; signal port3 : std_logic;",
             \},
-            \ modg2p3 : #{
-                \ VlsiPasteAsDefinition : "entity modg2p3 is generic ( param1 : natural := 1; param2 : natural := 2 ); port ( port1 : in std_logic; port2 : out std_logic; port3 : inout std_logic ); end entity modg2p3;",
-                \ VlsiPasteAsInterface  : "component modg2p3 is generic ( param1 : natural := 1; param2 : natural := 2 ); port ( port1 : in std_logic; port2 : out std_logic; port3 : inout std_logic ); end component modg2p3;",
-                \ VlsiPasteAsInstance   : "u_modg2p3 : modg2p3 generic map ( param1 => 1, param2 => 2 ) port map ( port1 => port1, port2 => port2, port3 => port3 );",
-                \ VlsiPasteSignals      : "signal port1 : std_logic; signal port2 : std_logic; signal port3 : std_logic;",
+            \ 'modg2p3' : {
+                \ 'VlsiPasteAsDefinition' : "entity modg2p3 is generic ( param1 : natural := 1; param2 : natural := 2 ); port ( port1 : in std_logic; port2 : out std_logic; port3 : inout std_logic ); end entity modg2p3;",
+                \ 'VlsiPasteAsInterface'  : "component modg2p3 is generic ( param1 : natural := 1; param2 : natural := 2 ); port ( port1 : in std_logic; port2 : out std_logic; port3 : inout std_logic ); end component modg2p3;",
+                \ 'VlsiPasteAsInstance'   : "u_modg2p3 : modg2p3 generic map ( param1 => 1, param2 => 2 ) port map ( port1 => port1, port2 => port2, port3 => port3 );",
+                \ 'VlsiPasteSignals'      : "signal port1 : std_logic; signal port2 : std_logic; signal port3 : std_logic;",
             \},
 \}
 
-let s:reference_vhdl_prefix_suffix = #{
-    \ modg2p3 : {
+let s:reference_vhdl_prefix_suffix = {
+    \ 'modg2p3' : {
         \ "VlsiPasteAsInstance"   : "u_p_modg2p3_s : modg2p3 generic map ( param1 => 1, param2 => 2 ) port map ( port1 => p_port1_s, port2 => p_port2_s, port3 => p_port3_s );",
         \ "VlsiPasteSignals"      : "signal p_port1_s : std_logic; signal p_port2_s : std_logic; signal p_port3_s : std_logic;",
     \},

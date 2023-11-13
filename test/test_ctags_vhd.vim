@@ -38,25 +38,25 @@ function! s:lookfor(list,elem)
 endfunction
 
 let s:expected_tags_fields = {
-            \ 'mod1'           : #{kind:'e'},
-            \ 'mod1gen1'       : #{kind:'g', entity:'mod1::generics'},
-            \ 'mod1gen2'       : #{kind:'g', entity:'mod1::generics'},
-            \ 'mod1port1'      : #{kind:'p', entity:'mod1::ports', signature:' (in)'},
-            \ 'mod1port2'      : #{kind:'p', entity:'mod1::ports', signature:' (out)'},
-            \ 'mod1port3'      : #{kind:'p', entity:'mod1::ports', signature:' (inout)'},
-            \ 'mod1_arch1'     : #{kind:'a', entity:'mod1'},
-            \ 'comp1'          : #{kind:'c', architecture:'mod1::mod1_arch1::components'},
-            \ 'arch1type1'     : #{kind:'t', architecture:'mod1::mod1_arch1::types'},
-            \ 'arch1proc1'     : #{kind:'r', architecture:'mod1::mod1_arch1::processes'},
-            \ 'arch1sig1'      : #{kind:'s', architecture:'mod1::mod1_arch1::signals'},
-            \ 'arch1sig2'      : #{kind:'s', architecture:'mod1::mod1_arch1::signals'},
-            \ 'arch1sig3'      : #{kind:'s', architecture:'mod1::mod1_arch1::signals'},
-            \ 'u_comp1'        : #{kind:'i', architecture:'mod1::mod1_arch1::instances', signature:' (comp1)'},
-            \ 'modfailport'    : #{kind:'e'},
-            \ 'modfailportok'  : #{kind:'p', entity:'modfailport::ports', signature:' (in)'},
+            \ 'mod1'           : {'kind': 'e'},
+            \ 'mod1gen1'       : {'kind': 'g', 'entity': 'mod1::generics'},
+            \ 'mod1gen2'       : {'kind': 'g', 'entity': 'mod1::generics'},
+            \ 'mod1port1'      : {'kind': 'p', 'entity': 'mod1::ports', 'signature': ' (in)'},
+            \ 'mod1port2'      : {'kind': 'p', 'entity': 'mod1::ports', 'signature': ' (out)'},
+            \ 'mod1port3'      : {'kind': 'p', 'entity': 'mod1::ports', 'signature': ' (inout)'},
+            \ 'mod1_arch1'     : {'kind': 'a', 'entity': 'mod1'},
+            \ 'comp1'          : {'kind': 'c', 'architecture': 'mod1::mod1_arch1::components'},
+            \ 'arch1type1'     : {'kind': 't', 'architecture': 'mod1::mod1_arch1::types'},
+            \ 'arch1proc1'     : {'kind': 'r', 'architecture': 'mod1::mod1_arch1::processes'},
+            \ 'arch1sig1'      : {'kind': 's', 'architecture': 'mod1::mod1_arch1::signals'},
+            \ 'arch1sig2'      : {'kind': 's', 'architecture': 'mod1::mod1_arch1::signals'},
+            \ 'arch1sig3'      : {'kind': 's', 'architecture': 'mod1::mod1_arch1::signals'},
+            \ 'u_comp1'        : {'kind': 'i', 'architecture': 'mod1::mod1_arch1::instances', 'signature': ' (comp1)'},
+            \ 'modfailport'    : {'kind': 'e'},
+            \ 'modfailportok'  : {'kind': 'p', 'entity': 'modfailport::ports', 'signature': ' (in)'},
 \ }
 let s:failing_expected_tags_fields = {
-            \ 'missing_port2'  : #{kind:'p', entity:'modfailport::ports', signature:' (out)'},
+            \ 'missing_port2'  : {'kind': 'p', 'entity': 'modfailport::ports', 'signature': ' (out)'},
             \}
 " }}}
 """ test functions
@@ -77,9 +77,9 @@ function s:tc.test_vhd_ctags_structure_valid()
 
     let valid_kinds = '[egpatscirKkfPv]'
     " valid field names
-    let all_valid_field_names = #{file:1, line:1, signature:1, kind:1, entity:1, access:1, architecture:1}
+    let all_valid_field_names = {'file':1, 'line':1, 'signature':1, 'kind':1, 'entity':1, 'access':1, 'architecture':1}
     "e.g. module::generics
-    let all_valid_scope_targets = #{entities:1,generics:1,ports:1,architectures:1,types:1,signals:1,components:1,instances:1,processes:1,packages:1,package:1,bodies:1,functions:1,procedures:1,variables:1}
+    let all_valid_scope_targets = {'entities':1,'generics':1,'ports':1,'architectures':1,'types':1,'signals':1,'components':1,'instances':1,'processes':1,'packages':1,'package':1,'bodies':1,'functions':1,'procedures':1,'variables':1}
 
     let invalid_line_count = 0
     let invalid_kind_count  = 0
@@ -118,7 +118,7 @@ function s:tc.test_vhd_ctags_structure_valid()
             let kind   = matchstr(trim(fields[0]),'^\(kind:\)\?\zs\w$')
             if  kind ==# '' || kind !~# valid_kinds
                 let invalid_kind_count +=1
-                call self.puts("Invalid kind for tag '".tag."' : '".kind."'")
+                call self.puts("Invalid kind for tag '".tag."': '".kind."'")
                 let parsed_fields.kind = ''
             else
                 "Valid kind
@@ -139,7 +139,7 @@ function s:tc.test_vhd_ctags_structure_valid()
                 let fl = matchlist(curfield,'^\(\w\+\):\(.*\)$')
                 if len(fl) == 0
                     let invalid_field_count +=1
-                    call self.puts("Invalid field for tag '". tag ."' : '". curfield ."'")
+                    call self.puts("Invalid field for tag '". tag ."': '". curfield ."'")
                 else
                     let fieldname = fl[1]
                     let fieldvalue= fl[2]
@@ -149,12 +149,12 @@ function s:tc.test_vhd_ctags_structure_valid()
             " check for file field
             if !has_key(parsed_fields, 'file')
                 let invalid_field_file_count +=1
-                call self.puts("missing 'file:' field for tag '".tag."'")
+                call self.puts("missing ''file': ' field for tag '".tag."'")
             endif
             " check for line field
             if !has_key(parsed_fields, 'line')
                 let invalid_field_line_count +=1
-                call self.puts("missing 'line:' field for tag '".tag."'")
+                call self.puts("missing ''line': ' field for tag '".tag."'")
             endif
 
             " check for unknown field

@@ -108,36 +108,36 @@ endfunction
 " {{{ 1
 function! s:tc.test_v_yank_minimal()
     let  l:label = 'minimal'
-    let  s:wanted = #{ lang:'verilog', generics:[], ports:[]}
+    let  s:wanted = { 'lang':'verilog', 'generics':[], 'ports':[]}
     call self.assert_yank_module_equals(l:label, s:wanted)
 endfunction
 
 function! s:tc.test_v_yank_generic1()
     let  l:label = 'generic1'
-    let  s:wanted = #{ lang:'verilog', generics:[#{name:'param1', type:'natural', value:'4'}], ports:[]}
+    let  s:wanted = { 'lang': 'verilog', 'generics':[{'name': 'param1', 'type': 'natural', 'value': '4'}], 'ports':[]}
     call self.assert_yank_module_equals(l:label, s:wanted)
 endfunction
 
 function! s:tc.test_v_yank_generic1a()
     let  l:label = 'generic1a'
-    let  s:wanted = #{ lang:'verilog', generics:[#{name:'param1', type:'natural', value:'4'}], ports:[]}
+    let  s:wanted = { 'lang':'verilog', 'generics':[{'name':'param1', 'type':'natural', 'value':'4'}], 'ports':[]}
     call self.assert_yank_module_equals(l:label, s:wanted)
 endfunction
 
 function! s:tc.test_v_yank_generic1b()
     let  l:label = 'generic1b'
-    let  s:wanted = #{ lang:'verilog', generics:[#{name:'param1', type:'natural', value:'4'}], ports:[]}
+    let  s:wanted = { 'lang':'verilog', 'generics':[{'name':'param1', 'type':'natural', 'value':'4'}], 'ports':[]}
     call self.assert_yank_module_equals(l:label, s:wanted)
 endfunction
 
 function! s:tc.test_v_yank_generics_multi()
     let  l:label = 'generics_multi'
-    let  s:wanted = #{ lang:'verilog', generics:[
-        \ #{name:'truc', type:'natural', value:'4'},
-        \ #{name:'machin', type:'natural', value:'33'},
-        \ #{name:'chose', type:'natural', value:'10'},
-        \ #{name:'thing', type:'natural', value:'8'},
-        \ ], ports:[]}
+    let  s:wanted = { 'lang':'verilog', 'generics':[
+        \ {'name':'truc', 'type':'natural', 'value':'4'},
+        \ {'name':'machin', 'type':'natural', 'value':'33'},
+        \ {'name':'chose', 'type':'natural', 'value':'10'},
+        \ {'name':'thing', 'type':'natural', 'value':'8'},
+        \ ], 'ports':[]}
     call self.assert_yank_module_equals(l:label, s:wanted)
 endfunction
 " }}}
@@ -148,34 +148,34 @@ endfunction
 
 function! s:tc.test_v_yank_port1()
     let  l:label = 'port1'
-    let  s:wanted = #{ lang:'verilog', generics:[], ports:[
-        \ #{name:'port1', type:'wire', range:0, dir:'i'}
+    let  s:wanted = { 'lang':'verilog', 'generics':[], 'ports':[
+        \ {'name':'port1', 'type':'wire', 'range':0, 'dir':'i'}
         \ ]}
     call self.assert_yank_module_equals(l:label, s:wanted)
 endfunction
 
 function! s:tc.test_v_yank_port1a()
     let  l:label = 'port1a'
-    let  s:wanted = #{ lang:'verilog', generics:[], ports:[
-        \ #{name:'port1', type:'wire', range:0, dir:'i'}
+    let  s:wanted = { 'lang':'verilog', 'generics':[], 'ports':[
+        \ {'name':'port1', 'type':'wire', 'range':0, 'dir':'i'}
         \ ]}
     call self.assert_yank_module_equals(l:label, s:wanted)
 endfunction
 
 function! s:tc.test_v_yank_port1b()
     let  l:label = 'port1b'
-    let  s:wanted = #{ lang:'verilog', generics:[], ports:[
-        \ #{name:'port1', type:'wire', range:0, dir:'i'}
+    let  s:wanted = { 'lang':'verilog', 'generics':[], 'ports':[
+        \ {'name':'port1', 'type':'wire', 'range':0, 'dir':'i'}
         \ ]}
     call self.assert_yank_module_equals(l:label, s:wanted)
 endfunction
 
 function! s:tc.test_v_yank_ports_multi()
     let  l:label = 'ports_multi'
-    let  s:wanted = #{ lang:'verilog', generics:[], ports:[
-                \ #{name:'port1', type:'wire', range:0, dir:'i'},
-                \ #{name:'port2', type:'wire', range:0, dir:'o'},
-                \ #{name:'port3', type:'wire', range:0, dir:'io'},
+    let  s:wanted = { 'lang':'verilog', 'generics':[], 'ports':[
+                \ {'name':'port1', 'type':'wire', 'range':0, 'dir':'i'},
+                \ {'name':'port2', 'type':'wire', 'range':0, 'dir':'o'},
+                \ {'name':'port3', 'type':'wire', 'range':0, 'dir':'io'},
                 \ ]}
     call self.assert_yank_module_equals(l:label, s:wanted)
 endfunction
@@ -188,10 +188,10 @@ endfunction
 
 function! s:tc.test_v_yank_ports_and_generics1()
     let  l:label = 'pg1'
-    let  s:wanted = #{ lang:'verilog', generics:[
-        \ #{name:'param1', type:'natural', value:'4'}
-        \ ], ports:[
-        \ #{name:'port1', type:'wire', range:0, dir:'i'}
+    let  s:wanted = { 'lang':'verilog', 'generics':[
+        \ {'name':'param1', 'type':'natural', 'value':'4'}
+        \ ], 'ports':[
+        \ {'name':'port1', 'type':'wire', 'range':0, 'dir':'i'}
         \ ]}
     call self.assert_yank_module_equals(l:label, s:wanted)
 endfunction
@@ -201,31 +201,31 @@ function! s:tc.test_failing_v_yank_ports_and_generics_on_the_same_line()
         return
     endif
     let  l:label = 'pg1a'
-    let  s:wanted = #{ lang:'verilog', generics:[#{name:'param1', type:'natural', value:'4'}], ports:[
-        \ #{name:'port1', type:'wire', range:0, dir:'i'}
+    let  s:wanted = { 'lang':'verilog', 'generics':[{'name':'param1', 'type':'natural', 'value':'4'}], 'ports':[
+        \ {'name':'port1', 'type':'wire', 'range':0, 'dir':'i'}
         \ ]}
     call self.assert_yank_module_equals(l:label, s:wanted)
 endfunction
 
 function! s:tc.test_v_yank_ports_and_generics1b()
     let  l:label = 'pg1b'
-    let  s:wanted = #{ lang:'verilog', generics:[#{name:'param1', type:'natural', value:'4'}], ports:[
-        \ #{name:'port1', type:'wire', range:0, dir:'i'}
+    let  s:wanted = { 'lang':'verilog', 'generics':[{'name':'param1', 'type':'natural', 'value':'4'}], 'ports':[
+        \ {'name':'port1', 'type':'wire', 'range':0, 'dir':'i'}
         \ ]}
     call self.assert_yank_module_equals(l:label, s:wanted)
 endfunction
 
 function! s:tc.test_v_yank_ports_and_genericss_multi()
     let  l:label = 'pgs_multi'
-    let  s:wanted = #{ lang:'verilog', generics:[
-                \ #{name:'truc', type:'natural', value:'4'},
-                \ #{name:'machin', type:'natural', value:'33'},
-                \ #{name:'chose', type:'natural', value:'10'},
-                \ #{name:'thing', type:'natural', value:'8'},
-                \], ports:[
-                \ #{name:'port1', type:'wire', range:0, dir:'i'},
-                \ #{name:'port2', type:'wire', range:0, dir:'o'},
-                \ #{name:'port3', type:'wire', range:0, dir:'io'},
+    let  s:wanted = { 'lang':'verilog', 'generics':[
+                \ {'name':'truc', 'type':'natural', 'value':'4'},
+                \ {'name':'machin', 'type':'natural', 'value':'33'},
+                \ {'name':'chose', 'type':'natural', 'value':'10'},
+                \ {'name':'thing', 'type':'natural', 'value':'8'},
+                \], 'ports':[
+                \ {'name':'port1', 'type':'wire', 'range':0, 'dir':'i'},
+                \ {'name':'port2', 'type':'wire', 'range':0, 'dir':'o'},
+                \ {'name':'port3', 'type':'wire', 'range':0, 'dir':'io'},
                 \ ]}
     call self.assert_yank_module_equals(l:label, s:wanted)
 endfunction
@@ -238,11 +238,11 @@ endfunction
 
 function! s:tc.test_v_yank_port_with_range()
     let  l:label = 'pr1'
-    let  s:wanted = #{ lang:'verilog', generics:[
-            \ #{name:'BUS_WIDTH', type:'natural', value:'32'}
-        \ ], ports:[
-            \ #{name:'bus', type:'wire',  range:'BUS_WIDTH-1{{:}}0', dir:'i'},
-            \ #{name:'bus2', type:'wire', range:'31{{:}}0', dir:'i'}
+    let  s:wanted = { 'lang':'verilog', 'generics':[
+            \ {'name':'BUS_WIDTH', 'type':'natural', 'value':'32'}
+        \ ], 'ports':[
+            \ {'name':'bus', 'type':'wire',  'range':'BUS_WIDTH-1{{:}}0', 'dir':'i'},
+            \ {'name':'bus2', 'type':'wire', 'range':'31{{:}}0', 'dir':'i'}
         \ ]}
     call self.assert_yank_module_equals(l:label, s:wanted)
 endfunction
@@ -255,23 +255,23 @@ endfunction
 "
 function! s:tc.test_v_yank_port_default_type()
     let  l:label = 'pdt'
-    let  s:wanted = #{ lang:'verilog', generics:[
-        \ ], ports:[
-            \ #{name:'port1', type:'',  range:0, dir:'i'},
-            \ #{name:'port2', type:'',  range:'3{{:}}0', dir:'o'},
-            \ #{name:'port3', type:'',  range:0, dir:'io'},
+    let  s:wanted = { 'lang':'verilog', 'generics':[
+        \ ], 'ports':[
+            \ {'name':'port1', 'type':'',  'range':0, 'dir':'i'},
+            \ {'name':'port2', 'type':'',  'range':'3{{:}}0', 'dir':'o'},
+            \ {'name':'port3', 'type':'',  'range':0, 'dir':'io'},
         \ ]}
     call self.assert_yank_module_equals(l:label, s:wanted)
 endfunction
 
 function! s:tc.test_v_yank_port_default_type1()
     let  l:label = 'pdt1'
-    let  s:wanted = #{ lang:'verilog', generics:[
-        \ ], ports:[
-            \ #{name:'port1', type:'',  range:0, dir:'i'},
-            \ #{name:'port2', type:'',  range:0, dir:'i'},
-            \ #{name:'port3', type:'',  range:0, dir:'o'},
-            \ #{name:'port4', type:'',  range:0, dir:'io'},
+    let  s:wanted = { 'lang':'verilog', 'generics':[
+        \ ], 'ports':[
+            \ {'name':'port1', 'type':'',  'range':0, 'dir':'i'},
+            \ {'name':'port2', 'type':'',  'range':0, 'dir':'i'},
+            \ {'name':'port3', 'type':'',  'range':0, 'dir':'o'},
+            \ {'name':'port4', 'type':'',  'range':0, 'dir':'io'},
         \ ]}
     call self.assert_yank_module_equals(l:label, s:wanted)
 endfunction
@@ -281,12 +281,12 @@ function! s:tc.test_failing_v_yank_port_default_type_all_ports_on_same_line()
         return
     endif
     let  l:label = 'pdt2'
-    let  s:wanted = #{ lang:'verilog', generics:[
-        \ ], ports:[
-            \ #{name:'port1', type:'',  range:0, dir:'i'},
-            \ #{name:'port2', type:'',  range:0, dir:'i'},
-            \ #{name:'port3', type:'',  range:0, dir:'o'},
-            \ #{name:'port4', type:'',  range:0, dir:'io'},
+    let  s:wanted = { 'lang':'verilog', 'generics':[
+        \ ], 'ports':[
+            \ {'name':'port1', 'type':'',  'range':0, 'dir':'i'},
+            \ {'name':'port2', 'type':'',  'range':0, 'dir':'i'},
+            \ {'name':'port3', 'type':'',  'range':0, 'dir':'o'},
+            \ {'name':'port4', 'type':'',  'range':0, 'dir':'io'},
         \ ]}
     call self.assert_yank_module_equals(l:label, s:wanted)
 endfunction

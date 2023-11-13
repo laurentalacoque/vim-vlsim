@@ -38,30 +38,30 @@ function! s:lookfor(list,elem)
 endfunction
 
 let s:expected_tags_fields = {
-            \ 'include1.sv': #{kind:'h'},
-            \ 'EMPTY_DEFINE'       : #{kind:'d'},
-            \ 'VALUE_DEFINE'       : #{kind:'d', signature:' (3)'},
-            \ 'typedef1'       : #{kind:'t'},
-            \ 'inter1' : #{kind:'I'},
-            \ 'inter1sig1' : #{kind:'s', interface:'inter1::signals'},
-            \ 'inter1sig2' : #{kind:'s', interface:'inter1::signals'},
-            \ 'inter1modport1' : #{kind:'P', interface:'inter1::modports'},
-            \ 'inter1modport2' : #{kind:'P', interface:'inter1::modports'},
-            \ 'mod1'       : #{kind:'m'},
-            \ 'mod1gen1'       : #{kind:'g', module:'mod1::generics', signature:' (1)'},
-            \ 'mod1gen2'       : #{kind:'g', module:'mod1::generics', signature:' (2)'},
-            \ 'mod1port1'      : #{kind:'p', module:'mod1::ports', signature:' (in)'},
-            \ 'mod1port2'      : #{kind:'p', module:'mod1::ports', signature:' (out)'},
-            \ 'mod1port3'      : #{kind:'p', module:'mod1::ports', signature:' (inout)'},
-            \ 'mod1port4'      : #{kind:'p', module:'mod1::ports', signature:' (inter1.inter1modport1)'},
-            \ 'mod1sig1'       : #{kind:'s', module:'mod1::signals', signature:' (logic)'},
-            \ 'mod1inst2'      : #{kind:'i', module:'mod1::instances', signature:' (inst_entity2)'},
-            \ 'mod1proc1'      : #{kind:'r', module:'mod1::processes', signature:' (initial)'},
-            \ 'line52'         : #{kind:'r', module:'mod1::processes', signature:' (initial)'},
-            \ 'mod1proc3'      : #{kind:'r', module:'mod1::processes', signature:' (always)'},
+            \ 'include1.sv': {'kind': 'h'},
+            \ 'EMPTY_DEFINE'       : {'kind': 'd'},
+            \ 'VALUE_DEFINE'       : {'kind': 'd', 'signature': ' (3)'},
+            \ 'typedef1'       : {'kind': 't'},
+            \ 'inter1' : {'kind': 'I'},
+            \ 'inter1sig1' : {'kind': 's', 'interface': 'inter1::signals'},
+            \ 'inter1sig2' : {'kind': 's', 'interface': 'inter1::signals'},
+            \ 'inter1modport1' : {'kind': 'P', 'interface': 'inter1::modports'},
+            \ 'inter1modport2' : {'kind': 'P', 'interface': 'inter1::modports'},
+            \ 'mod1'       : {'kind': 'm'},
+            \ 'mod1gen1'       : {'kind': 'g', 'module': 'mod1::generics', 'signature': ' (1)'},
+            \ 'mod1gen2'       : {'kind': 'g', 'module': 'mod1::generics', 'signature': ' (2)'},
+            \ 'mod1port1'      : {'kind': 'p', 'module': 'mod1::ports', 'signature': ' (in)'},
+            \ 'mod1port2'      : {'kind': 'p', 'module': 'mod1::ports', 'signature': ' (out)'},
+            \ 'mod1port3'      : {'kind': 'p', 'module': 'mod1::ports', 'signature': ' (inout)'},
+            \ 'mod1port4'      : {'kind': 'p', 'module': 'mod1::ports', 'signature': ' (inter1.inter1modport1)'},
+            \ 'mod1sig1'       : {'kind': 's', 'module': 'mod1::signals', 'signature': ' (logic)'},
+            \ 'mod1inst2'      : {'kind': 'i', 'module': 'mod1::instances', 'signature': ' (inst_entity2)'},
+            \ 'mod1proc1'      : {'kind': 'r', 'module': 'mod1::processes', 'signature': ' (initial)'},
+            \ 'line52'         : {'kind': 'r', 'module': 'mod1::processes', 'signature': ' (initial)'},
+            \ 'mod1proc3'      : {'kind': 'r', 'module': 'mod1::processes', 'signature': ' (always)'},
 \ }
 let s:failing_expected_tags_fields = {
-            \ 'mod1inst1'      : #{kind:'i', module:'mod1::instances', signature:' (inst_entity)'},
+            \ 'mod1inst1'      : {'kind': 'i', 'module': 'mod1::instances', 'signature': ' (inst_entity)'},
             \}
 " }}}
 """ test functions
@@ -81,9 +81,9 @@ function s:tctags.test_v_sv_ctags_structure_valid()
 
     let valid_kinds = '[dhmIgpPsirt]'
     " valid field names
-    let all_valid_field_names = #{file:1, line:1, signature:1, kind:1, module:1, access:1, interface:1}
+    let all_valid_field_names = {'file':1, 'line':1, 'signature':1, 'kind':1, 'module':1, 'access':1, 'interface':1}
     "e.g. module::generics
-    let all_valid_scope_targets = #{ports:1,generics:1,instances:1, modports:1, signals:1, processes:1}
+    let all_valid_scope_targets = {'ports':1,'generics':1,'instances':1, 'modports':1, 'signals':1, 'processes':1}
 
     let invalid_line_count = 0
     let invalid_kind_count  = 0
@@ -124,7 +124,7 @@ function s:tctags.test_v_sv_ctags_structure_valid()
             let kind   = matchstr(trim(fields[0]),'^\(kind:\)\?\zs\w$')
             if  kind ==# '' || kind !~# valid_kinds
                 let invalid_kind_count +=1
-                call self.puts("Invalid kind for tag '".tag."' : '".kind."'")
+                call self.puts("Invalid kind for tag '".tag."': '".kind."'")
                 let parsed_fields.kind = ''
             else
                 "Valid kind
@@ -151,7 +151,7 @@ function s:tctags.test_v_sv_ctags_structure_valid()
                 let fl = matchlist(curfield,'^\(\w\+\):\(.*\)$')
                 if len(fl) == 0
                     let invalid_field_count +=1
-                    call self.puts("Invalid field for tag '". tag ."' : '". curfield ."'")
+                    call self.puts("Invalid field for tag '". tag ."': '". curfield ."'")
                 else
                     let fieldname = fl[1]
                     let fieldvalue= fl[2]
@@ -161,12 +161,12 @@ function s:tctags.test_v_sv_ctags_structure_valid()
             " check for file field
             if !has_key(parsed_fields, 'file')
                 let invalid_field_file_count +=1
-                call self.puts("missing 'file:' field for tag '".tag."'")
+                call self.puts("missing ''file': ' field for tag '".tag."'")
             endif
             " check for line field
             if !has_key(parsed_fields, 'line')
                 let invalid_field_line_count +=1
-                call self.puts("missing 'line:' field for tag '".tag."'")
+                call self.puts("missing ''line': ' field for tag '".tag."'")
             endif
 
             " check for unknown field

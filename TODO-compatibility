@@ -1,6 +1,6 @@
 Things to do for compatibility:
 
-- get rid of remaining #{ } dicts in test/
 - 7.x doesn't support default values for arguments
+- 7.x doesn't support function('funcname',[arglist]), must convert to function('funcname') somehow
 
 - test with /bin/gvim (7.4)
